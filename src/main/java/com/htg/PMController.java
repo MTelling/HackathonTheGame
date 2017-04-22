@@ -15,7 +15,7 @@ public class PMController {
 
 
     @Autowired
-    SimpMessagingTemplate simpMessagingTemplate;
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     private ServerState state;
@@ -39,9 +39,10 @@ public class PMController {
     }
 
 
-    public void announceWin(String winner) {
+    public void announceWin(String winnerUsername) {
         System.out.println("Announcing new winner");
-        simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("Winner is: " + winner));
+        state.goToNextChallenge();
+        simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("win", winnerUsername));
     }
 
 

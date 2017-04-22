@@ -6,7 +6,8 @@ import java.util.HashMap;
 
 @Component
 public class ServerState {
-    private Challenge currentChallenge = new Challenge("lol","test,","This is a test challenge for testing");
+    private ChallengeServer challengeServer = new ChallengeServer();
+    private ChallengeDescription currentChallengeDescription = challengeServer.getNextChallengeDescription();
     private HashMap<String, User> sessionIds = new HashMap<>();
     private HashMap<String, User> users = new HashMap<>();
     /**
@@ -33,12 +34,13 @@ public class ServerState {
         return null;
     }
 
-    synchronized public Challenge getCurrentChallenge() {
-        return currentChallenge;
+    synchronized public ChallengeDescription getCurrentChallengeDescription() {
+        return currentChallengeDescription;
     }
 
-    synchronized public void setCurrentChallenge(Challenge currentChallenge) {
-        this.currentChallenge = currentChallenge;
+
+    synchronized public void goToNextChallenge() {
+        currentChallengeDescription = challengeServer.getNextChallengeDescription();
     }
 }
 
