@@ -1,6 +1,7 @@
 {
   "name": "Multiplying numbers",
   "description": "Multiply the two arguments together and return the result.",
+  "filename": "Challenge_Two.json",
   "tests": [
     {
       "arguments": [

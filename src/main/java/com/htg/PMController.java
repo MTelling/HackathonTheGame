@@ -32,7 +32,7 @@ public class PMController {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
 
         System.out.println("In the pmcontroller");
-        String[][] compileResults;
+        Object[][] compileResults;
 
         String  code = pmRequest.getCode(),
                 fileName = sessionID + ".java",
@@ -40,14 +40,19 @@ public class PMController {
                 compilePath = "",
                 path = Paths.get("").toAbsolutePath().toString();
 
+
+        code = code.replace("public class Program", "public class " + sessionID);
+
         // Write code to java file
-        try(  PrintWriter out = new PrintWriter( testingPath + "/" + fileName ) ){ out.println( code ); }
+        try( PrintWriter out = new PrintWriter( testingPath + "/" + fileName ) ) { out.println( code ); }
+        
 
         // Compiles given code, returns if it failed compiling
         if ( compile("javac", path  + "/" + testingPath + "/" + fileName)[1].length > 0 ) {
             System.out.println("COMPILING ERROR");
             return new PMResponse("COMPILING ERROR");
         }
+
         // Runs tests
         compileResults = compile("java", "-jar", path + "/" + compilePath + "/compiler.jar");
         // If stuff fuck up, blame Tobias
@@ -58,8 +63,8 @@ public class PMController {
 
         // Build result
         StringBuilder result = new StringBuilder();
-        for(String s : compileResults[0])
-            result.append(s);
+        for(Object s : compileResults[0])
+            result.append((String)s);
 
         // Check if all tests are completed
         boolean hasWon = result.toString().split(",")[0].split(" ")[1].equals("true");
@@ -70,14 +75,14 @@ public class PMController {
     }
 
 
-    private String[][] compile(String... args) throws IOException, InterruptedException {
+    private Object[][] compile(String... args) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder();
         pb.command(args);
         Process proc = pb.start();
         BufferedReader errors = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
         BufferedReader output = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         proc.waitFor();
-        return new String[][]{(String[])output.lines().toArray(), (String[])errors.lines().toArray()};
+        return new Object[][]{output.lines().toArray(), errors.lines().toArray()};
     }
 
 

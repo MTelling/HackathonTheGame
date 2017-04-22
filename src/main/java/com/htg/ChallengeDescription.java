@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class ChallengeDescription {
 
-    private String name, description, initialCode;
+    private String name, description, initialCode, filename;
     private List<Test> tests;
 
     public String getName() {
@@ -40,6 +40,14 @@ public class ChallengeDescription {
 
     public void setInitialCode(String initialCode) {
         this.initialCode = initialCode;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }
 
