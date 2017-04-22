@@ -8,26 +8,104 @@ import Output from './Output';
 export default class Game extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: false };
+    this.state = {
+      open: false,
+      challenge: {
+        name: "",
+        description: "",
+        initialCode: "",
+      },
+      code: "",
+      output: "",
+    };
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmitCode = this.handleSubmitCode.bind(this);
+  }
+
+  componentDidMount(){
+    var socket = new SockJS('/htg');
+    this.stompClient = Stomp.over(socket);
+
+    var that = this;
+    this.stompClient.connect({}, function (frame) {
+      console.log('Connected: ' + frame);
+
+      that.stompClient.subscribe('/user/queue/game', function (gameResponse) {
+          console.log("Got new game description!");
+          var challengeDescription = JSON.parse(gameResponse.body).challengeDescription;
+
+          if (that.state.challenge === null || challengeDescription.name !== that.state.challenge.name) {
+              that.setState({
+                challenge: challengeDescription,
+                code: challengeDescription.initialCode + "\n//type your code here...",
+               });
+              console.log(that.state.challenge);
+          }
+      });
+
+      that.stompClient.subscribe('/user/queue/pm', function (pmResponse) {
+        // log to output
+          console.log("Got pm response!");
+          // that.setState({
+          //   output: that.state.output + JSON.parse(pmResponse.body).message + "\n",
+          // })
+          console.log(JSON.parse(pmResponse.body).status);
+      });
+
+      that.stompClient.subscribe('/topic/news', function (data) {
+          console.log("Got news!");
+          var news = JSON.parse(data.body);
+          var type = news.type;
+
+          if (type === "win") {
+            // news.message = winner name
+            console.log(news.message);
+            that.stompClient.send("/app/game", {}, JSON.stringify({}));
+          }
+      });
+
+      that.stompClient.send("/app/game", {}, JSON.stringify({}));
+    });
   }
 
   handleToggle() {
     this.setState({ open: !this.state.open });
   }
 
+  handleChange(change, e) {
+    this.setState({
+      code: change,
+    });
+  };
+
+  handleSubmitCode(e) {
+    e.preventDefault();
+    this.stompClient.send("/app/pm", {}, JSON.stringify({"code": this.state.code }));
+    console.log("Submit username \"" + this.state.code + "\"");
+  }
+
   render() {
+    let user = this.context.store.user;
+    let challenge = this.state.challenge;
+
     return (
       <div className="gameContainer">
-        <h1>Challenge</h1>
-        <h3>Welcome {this.context.store.user.username}</h3>
+        <h1>Challenge - {challenge.name}</h1>
+        <h3>Welcome {user.username}</h3>
+        <p>{"Hint (will be removed):"}<br/>
+		        {"return new Object[] {Interger.parseInt(args[0])+Interger.parseInt(args[1]);}"}
+        </p>
         <RaisedButton
           label="Toggle Drawer"
           onTouchTap={this.handleToggle}/>
         <Drawer open={this.state.open}>
-          challenge 123
+          {challenge.description}
         </Drawer>
-        <Editor />
+        <Editor
+        code={this.state.code}
+        onChange={this.handleChange}
+        onSubmit={this.handleSubmitCode}/>
         <Output />
       </div>
     );

@@ -6,11 +6,13 @@ package com.htg;
 public class LoginResponse {
 
     private String status;
+    private String username;
 
     public LoginResponse(){};
 
-    public LoginResponse(String status) {
+    public LoginResponse(String status, String username) {
         this.status = status;
+        this.username = username;
     }
 
     public String getStatus() {
@@ -19,5 +21,13 @@ public class LoginResponse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

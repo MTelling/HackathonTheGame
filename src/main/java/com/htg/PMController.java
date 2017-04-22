@@ -71,7 +71,7 @@ public class PMController {
 
         // Check if all tests are completed
         RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
-        if ( runnerResult.isSuccess() )
+        if ( runnerResult.isSuccess() ){
             announceWin(state.getUser(sessionID).getName());
             state.updateUserScore(sessionID, 1);
         }

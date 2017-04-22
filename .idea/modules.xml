@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/git-springboottemplate.iml" filepath="$PROJECT_DIR$/.idea/modules/git-springboottemplate.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/git-springboottemplate_main.iml" filepath="$PROJECT_DIR$/.idea/modules/git-springboottemplate_main.iml" group="springboottemplate" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/springboottemplate.iml" filepath="$PROJECT_DIR$/.idea/modules/springboottemplate.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/springboottemplate_main.iml" filepath="$PROJECT_DIR$/.idea/modules/springboottemplate_main.iml" group="springboottemplate" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/springboottemplate_test.iml" filepath="$PROJECT_DIR$/.idea/modules/springboottemplate_test.iml" group="springboottemplate" />

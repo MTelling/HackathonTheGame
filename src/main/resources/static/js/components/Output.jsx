@@ -9,7 +9,7 @@ export default class Game extends Component {
 
   render() {
     return (
-      <div className="gameContainer">
+      <div className="outputConsole">
 
       </div>
     );

@@ -19,7 +19,7 @@ export default class Login extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.context.store.login(this.state.value, this.props.router);
+    this.context.store.login(this.state.value);
     console.log("Submit username \"" + this.state.value + "\"");
   }
 
