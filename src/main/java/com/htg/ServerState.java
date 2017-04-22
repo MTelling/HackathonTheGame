@@ -1,7 +1,10 @@
 package com.htg;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 
+@Component
 public class ServerState {
     private Game currentGame = null;
     private HashMap<String, User> users = new HashMap<>();
@@ -14,7 +17,7 @@ public class ServerState {
     synchronized boolean addUser( User user ){
         if(users.containsKey(user.getName()))
             return false;
-        users.put(user.getName (), user);
+        users.put(user.getName(), user);
         return true;
     }
 

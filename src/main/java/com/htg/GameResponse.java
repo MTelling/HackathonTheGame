@@ -1,23 +1,21 @@
 package com.htg;
 
-/**
- * Created by Morten on 22/04/2017.
- */
 public class GameResponse {
 
-    private String status;
+    private Game status;
 
     public GameResponse(){};
 
-    public GameResponse(String status) {
+    public GameResponse(Game status) {
         this.status = status;
     }
 
-    public String getStatus() {
+    public Game getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Game status) {
         this.status = status;
     }
+
 }

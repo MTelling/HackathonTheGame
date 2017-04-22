@@ -6,19 +6,18 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-/**
- * Created by Morten on 22/04/2017.
- */
 @Controller
 public class GameController {
+
+    @Autowired
+    private static ServerState state;
 
     @MessageMapping("/game")
     @SendTo("/topic/game")
     public GameResponse gameResponse(GameRequest gameRequest, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
 
-
-        return new GameResponse(sessionID);
+        return new GameResponse(state.getCurrentGame());
     }
 
 }
