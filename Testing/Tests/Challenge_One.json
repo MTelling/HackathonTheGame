@@ -1,7 +1,7 @@
 {
   "name": "Adding numbers",
   "description": "Add the two arguments together and return the result.",
-  "filename": "Challenge_One.json",
+  "filename": "Challenge_One",
   "tests": [
     {
       "arguments": [

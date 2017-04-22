@@ -1,4 +1,5 @@
 var stompClient = null;
+var currentChallengeDescription = null;
 
 function subscribeToPM() {
     stompClient.subscribe('/user/queue/pm', function (pmResponse) {
@@ -22,17 +23,36 @@ function subscribeToLogin() {
 }
 
 function subscribeToNews() {
-    stompClient.subscribe('/topic/news', function (news) {
+    stompClient.subscribe('/topic/news', function (data) {
         console.log("Got news!");
-        console.log(JSON.parse(news.body).news);
+        var news = JSON.parse(data.body);
+        var type = news.type;
+
+        if (type === "win") {
+            handleWin(news.message);
+        }
     });
 }
 
 function subscribeToGame() {
-    stompClient.subscribe('/topic/game', function (gameResponse) {
-        console.log("Got response!");
-        console.log(JSON.parse(gameResponse.body).status);
+    stompClient.subscribe('/user/queue/game', function (gameResponse) {
+        console.log("Got game description!");
+        var challengeDescription = JSON.parse(gameResponse.body).challengeDescription;
+
+        if (currentChallengeDescription === null || challengeDescription.name !== currentChallengeDescription.name) {
+            currentChallengeDescription = challengeDescription;
+            handleNewChallenge()
+        }
     });
+}
+
+function handleNewChallenge() {
+    console.log("getting new challenge");
+    console.log("Name is " + currentChallengeDescription.name);
+    console.log("Description is " + currentChallengeDescription.description);
+    $("#challengeName").text(currentChallengeDescription.name);
+    $("#challengeDescription").text(currentChallengeDescription.description);
+    $("#challengeInitialCode").text(currentChallengeDescription.initialCode);
 }
 
 function unsubscribeCheckLogin() {
@@ -71,15 +91,8 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
 
-
         subscribeToCheckLogin();
         stompClient.send("/app/checkLogin", {}, JSON.stringify({"username":""}));
-
-
-
-        //stompClient.send("/app/game", {}, JSON.stringify({}));
-        //stompClient.send("/app/pm", {}, JSON.stringify({"code": "somuchcode"}));
-
 
     });
 }
@@ -108,6 +121,16 @@ function handleLogin(status) {
     }
 }
 
+function requestChallengeDescription() {
+    stompClient.send("/app/game", {}, JSON.stringify({}));
+}
+
+function handleWin(username) {
+    alert(username + " won!");
+
+    requestChallengeDescription();
+}
+
 function hideLogin() {
     $("#loginContainer").hide();
 }
@@ -123,10 +146,13 @@ function showGame() {
 }
 
 function beginGame() {
+
     unsubscribeLogin();
     subscribeToPM();
     subscribeToGame();
     subscribeToNews();
+
+    requestChallengeDescription();
 }
 
 function showLoginError() {
@@ -153,7 +179,7 @@ $(document).ready(function () {
     });
 
     $( "#winbtn" ).click(function() {
-        stompClient.send("/app/pm", {}, JSON.stringify({"code": "somuchcode"}));
+        stompClient.send("/app/pm", {}, JSON.stringify({"code": "package Testing;\n\npublic class Program {\n\tpublic Object[] run(String[] args) {\n\t\treturn new Object[] {Integer.parseInt(args[0]) + Integer.parseInt(args[1])};\n\t}\n}"}));
     });
 
 

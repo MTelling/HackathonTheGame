@@ -1,19 +1,16 @@
 package com.htg;
 
-import org.apache.catalina.Server;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import com.google.gson.Gson;
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 
 @Controller
@@ -35,27 +32,34 @@ public class PMController {
         Object[][] compileResults;
 
         String  code = pmRequest.getCode(),
-                fileName = sessionID + ".java",
                 testingPath = "Testing",
                 compilePath = "",
-                path = Paths.get("").toAbsolutePath().toString();
+                path = Paths.get("").toAbsolutePath().toString(),
+                classNamePrefix = "P",
+                className = classNamePrefix + sessionID,
+                fileName = className + ".java";
 
 
-        code = code.replace("public class Program", "public class " + sessionID);
+        code = code.replace("public class Program", "public class " + className);
 
         // Write code to java file
         try( PrintWriter out = new PrintWriter( testingPath + "/" + fileName ) ) { out.println( code ); }
-        
+
 
         // Compiles given code, returns if it failed compiling
-        if ( compile("javac", path  + "/" + testingPath + "/" + fileName)[1].length > 0 ) {
+        if ( run("javac", path  + "/" + testingPath + "/" + fileName)[1].length > 0 ) {
             System.out.println("COMPILING ERROR");
             return new PMResponse("COMPILING ERROR");
         }
 
         // Runs tests
-        compileResults = compile("java", "-jar", path + "/" + compilePath + "/compiler.jar");
+        System.out.println(path + "Compiler.jar");
+        compileResults = run("java", "-jar", path + "/Compiler.jar", state.getCurrentChallengeDescription().getFilename(), className);
         // If stuff fuck up, blame Tobias
+        for (int i = 0; i < compileResults.length; i++) {
+            System.out.println(compileResults[i].toString());
+        }
+
         if ( compileResults[1].length > 0 ) {
             System.out.println("SERVER ERROR");
             return new PMResponse("SERVER ERROR");
@@ -67,15 +71,15 @@ public class PMController {
             result.append((String)s);
 
         // Check if all tests are completed
-        boolean hasWon = result.toString().split(",")[0].split(" ")[1].equals("true");
-        if ( hasWon )
+        RunnerResult runnerResult = new Gson().fromJson(result.toString(), RunnerResult.class);
+        if ( runnerResult.isSuccess() )
             announceWin(state.getUser(sessionID).getName());
 
         return new PMResponse(result.toString());
     }
 
 
-    private Object[][] compile(String... args) throws IOException, InterruptedException {
+    private Object[][] run(String... args) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder();
         pb.command(args);
         Process proc = pb.start();

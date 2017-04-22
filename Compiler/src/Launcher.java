@@ -27,7 +27,7 @@ public class Launcher {
 
         File compilerRoot = new File(Paths.get("").toString());
         String absPath = compilerRoot.getAbsolutePath();
-        File root = new File(Paths.get(absPath.substring(0, absPath.lastIndexOf("\\"))).toString());
+        File root = new File(Paths.get(absPath.substring(0, absPath.lastIndexOf("/"))).toString());
 
         Challenge challenge = null;
         try {
@@ -41,6 +41,7 @@ public class Launcher {
         if(challenge != null) {
             Object prg = null;
             java.lang.reflect.Method method = null;
+            ExecutorService executor = null;
             try {
                 URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
                 Class<?> aClass = Class.forName("Testing." + args[1], true, classLoader);
@@ -54,7 +55,7 @@ public class Launcher {
             }
             for (int i = 0; i < challenge.getTests().size(); i++) {
                 Test test = challenge.getTests().get(i);
-                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor = Executors.newSingleThreadExecutor();
                 Future<String> future = executor.submit(new CodeChecker(prg, method, result, test, i));
                 try {
                     if(future.get(30, TimeUnit.SECONDS).equals("error")) {
@@ -75,6 +76,7 @@ public class Launcher {
             }
         }
         System.out.println(gson.toJson(result, Result.class));
+        ex
     }
 }
 
