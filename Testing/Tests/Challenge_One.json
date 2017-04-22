@@ -1,0 +1,24 @@
+{
+  "name": "Adding numbers",
+  "description": "Add the two arguments together and return the result",
+  "tests": [
+    {
+      "arguments": [
+        "4",
+        "6"
+      ],
+      "expectedReturns": [
+        10
+      ]
+    },
+    {
+      "arguments": [
+        "10",
+        "6"
+      ],
+      "expectedReturns": [
+        16
+      ]
+    }
+  ]
+}
