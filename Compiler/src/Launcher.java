@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.util.concurrent.*;
 
@@ -27,12 +29,13 @@ public class Launcher {
 
         File compilerRoot = new File(Paths.get("").toString());
         String absPath = compilerRoot.getAbsolutePath();
-        File root = new File(Paths.get(absPath.substring(0, absPath.lastIndexOf("\\"))).toString());
+        File root = new File(FileSystems.getDefault().getPath("").toAbsolutePath().toString());
 
         Challenge challenge = null;
         try {
             challenge = gson.fromJson(new BufferedReader(new FileReader(root.getAbsolutePath() + "/Testing/Tests/" + args[0] + ".json")), Challenge.class);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
             result.runtimeErrors.add(e.getMessage());
             System.out.println(gson.toJson(result, Result.class));
             System.exit(0);
@@ -48,6 +51,7 @@ public class Launcher {
 
                 method = aClass.getMethod("run", String[].class);
             } catch (Exception e) {
+                e.printStackTrace();
                 result.runtimeErrors.add(e.getMessage());
                 System.out.println(gson.toJson(result, Result.class));
                 System.exit(0);
@@ -68,6 +72,8 @@ public class Launcher {
                     System.exit(0);
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
+                } finally {
+                    executor.shutdown();
                 }
             }
             if (result.passedTests == challenge.getTests().size()) {
@@ -75,6 +81,7 @@ public class Launcher {
             }
         }
         System.out.println(gson.toJson(result, Result.class));
+        System.exit(0);
     }
 }
 
