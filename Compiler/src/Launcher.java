@@ -15,8 +15,12 @@ import java.nio.file.Paths;
 public class Launcher {
 
     public static void main(String... args) {
+        Result result = new Result();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.setPrettyPrinting().serializeNulls().create();
         if(args.length < 1) {
-            System.out.println("Error: Please supply name of program to test");
+            result.compilerErrors.add("Error: Please supply name of program to test");
+            System.out.println(gson.toJson(result, Result.class));
             System.exit(0);
         }
 
@@ -24,17 +28,14 @@ public class Launcher {
         String absPath = compilerRoot.getAbsolutePath();
         File root = new File(Paths.get(absPath.substring(0, absPath.lastIndexOf("\\"))).toString());
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.setPrettyPrinting().serializeNulls().create();
         Challenge challenge = null;
         try {
             challenge = gson.fromJson(new BufferedReader(new FileReader(root.getAbsolutePath() + "/Testing/Tests/" + args[0] + ".json")), Challenge.class);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            result.compilerErrors.add(e.getMessage());
         }
 
         if(challenge != null) {
-            Result result = new Result();
             try {
                 URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
                 Class<?> aClass = Class.forName("Testing.Program", true, classLoader);
@@ -63,13 +64,11 @@ public class Launcher {
                 if(result.passedTests == challenge.getTests().size()) {
                     result.success = true;
                 }
-                System.out.println(gson.toJson(result, Result.class));
             } catch (Exception e) {
-                e.printStackTrace();
+                result.compilerErrors.add(e.getMessage());
             }
-        } else {
-            System.out.println("Error: Unable to find challenge");
         }
+        System.out.println(gson.toJson(result, Result.class));
     }
 
 }
