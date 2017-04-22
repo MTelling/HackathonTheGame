@@ -38,7 +38,9 @@ export default class Game extends Component {
           if (that.state.challenge === null || challengeDescription.name !== that.state.challenge.name) {
               that.setState({
                 challenge: challengeDescription,
-                code: challengeDescription.initialCode + "\n//type your code here...",
+                code: challengeDescription.initialCode +
+                "\n//type your code here...\
+                \n//return new Object[] {Integer.parseInt(args[0])+Integer.parseInt(args[1])};",
                });
               console.log(that.state.challenge);
           }
@@ -47,10 +49,10 @@ export default class Game extends Component {
       that.stompClient.subscribe('/user/queue/pm', function (pmResponse) {
         // log to output
           console.log("Got pm response!");
-          // that.setState({
-          //   output: that.state.output + JSON.parse(pmResponse.body).message + "\n",
-          // })
-          console.log(JSON.parse(pmResponse.body).status);
+          that.setState({
+            output: JSON.parse(pmResponse.body).message,
+          })
+          console.log(that.state.output);
       });
 
       that.stompClient.subscribe('/topic/news', function (data) {
@@ -94,19 +96,20 @@ export default class Game extends Component {
         <h1>Challenge - {challenge.name}</h1>
         <h3>Welcome {user.username}</h3>
         <p>{"Hint (will be removed):"}<br/>
-		        {"return new Object[] {Interger.parseInt(args[0])+Interger.parseInt(args[1]);}"}
+		        {""}
         </p>
         <RaisedButton
-          label="Toggle Drawer"
+          label="Toggle"
           onTouchTap={this.handleToggle}/>
         <Drawer open={this.state.open}>
           {challenge.description}
         </Drawer>
+
         <Editor
         code={this.state.code}
         onChange={this.handleChange}
         onSubmit={this.handleSubmitCode}/>
-        <Output />
+        <Output output={this.state.output}/>
       </div>
     );
   }

@@ -80,6 +80,8 @@ public class PMController {
 
     private String createOutputString(RunnerResult runnerResult) {
         StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("Succeeded: ").append(runnerResult.isSuccess() ? "Yes": "No").append("\n");
         stringBuilder.append("Passed Tests: ").append(runnerResult.getPassedTests()).append("\n");
 
         if (runnerResult.getErrors().size() > 0) {

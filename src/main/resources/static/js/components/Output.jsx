@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import RaisedButton from 'material-ui/RaisedButton';
+import Paper from 'material-ui/Paper';
 
-export default class Game extends Component {
+export default class Output extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-      <div className="outputConsole">
-
-      </div>
+        <Paper className="outputContainer" zDepth={2} rounded={false}>
+          <p className="output">
+            test
+            {this.props.output}
+          </p>
+        </Paper>
     );
   }
 }
