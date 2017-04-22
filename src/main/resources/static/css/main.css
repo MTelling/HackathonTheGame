@@ -26,7 +26,6 @@ a {
   vertical-align: middle;
   text-align: center;
   min-height: 70vh;
-  padding: 20% 0;
 }
 .loginContainer{
   display: inline-block;
@@ -38,4 +37,7 @@ a {
 }
 .loginButton {
   margin: 0 5px;
+}
+.gameContainer {
+  text-align: left;
 }

@@ -19,13 +19,13 @@ export default class Login extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.context.store);
-    this.context.store.login(this.state.value);
-    alert("Submit username \"" + this.state.value + "\"");
+    this.context.store.login(this.state.value, this.props.router);
+    console.log("Submit username \"" + this.state.value + "\"");
   }
 
   render() {
     return (
+      <div style={{padding: "20% 0"}}>
         <Paper className="loginContainer" zDepth={2} >
           <div id="loginErrorContainer" style={{display:"none"}}>
             <p>User name is already in use. Try another!</p>
@@ -35,6 +35,7 @@ export default class Login extends Component {
             onChange={this.handleChange}
             onSubmit={this.handleSubmit}/>
         </Paper>
+      </div>
     );
   }
 }
