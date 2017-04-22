@@ -1,0 +1,32 @@
+{
+  "name": "Counting a's",
+  "description": "The goal of this challenge is to write a program that counts the number of e's in a string supplied in the first argument..",
+  "filename": "Challenge_Three",
+  "tests": [
+    {
+      "arguments": [
+        "Copenhacks"
+      ],
+      "expectedReturns": [
+        1
+      ]
+    },
+    {
+      "arguments": [
+        "Major League Hacking"
+      ],
+      "expectedReturns": [
+        3
+      ]
+    },
+    {
+      "arguments": [
+        "Bloomberg"
+      ],
+      "expectedReturns": [
+        0
+      ]
+    }
+  ],
+  "initialCode": "package Testing;\n\npublic class Program {\n\tpublic Object[] run(String[] args) {\n\t\treturn new Object[] {-1};\n\t}\n}"
+}
