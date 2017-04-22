@@ -18,11 +18,11 @@ public class ServerState {
         return true;
     }
 
-    public Game getCurrentGame () {
+    synchronized public Game getCurrentGame () {
         return currentGame;
     }
 
-    public void setCurrentGame (Game currentGame) {
+    synchronized public void setCurrentGame (Game currentGame) {
         this.currentGame = currentGame;
     }
 }
