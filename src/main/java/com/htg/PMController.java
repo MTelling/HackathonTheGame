@@ -9,6 +9,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 
 @Controller
 public class PMController {
@@ -31,11 +34,18 @@ public class PMController {
         String code = pmRequest.getCode();
         // TODO: compile code, do magic, test results
 
-        String response = "Yo code is shit";
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.command("");
+        Process proc = builder.start();
+        BufferedReader output = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        proc.waitFor();
 
-        announceWin(state.getUser(sessionID).getName());
-
-        return new PMResponse(response);
+        StringBuilder result = new StringBuilder();
+        result.append(output.lines());
+        boolean hasWon = result.toString().split(",")[0].split(" ")[1].equals("true");
+        if(hasWon)
+            announceWin(state.getUser(sessionID).getName());
+        return new PMResponse(result.toString());
     }
 
 
