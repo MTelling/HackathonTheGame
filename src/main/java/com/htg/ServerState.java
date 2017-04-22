@@ -40,7 +40,7 @@ public class ServerState {
         return null;
     }
 
-    public void updateUserScore(String sessionId, int i){
+    synchronized public void updateUserScore(String sessionId, int i){
         User user = getUser(sessionId);
         leaderBoard.remove(user);
         user.addScore(i);
