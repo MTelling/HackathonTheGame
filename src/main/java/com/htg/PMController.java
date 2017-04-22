@@ -1,7 +1,6 @@
 package com.htg;
 
 import com.google.gson.Gson;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -108,7 +107,7 @@ public class PMController {
     public void announceWin(String winnerUsername) {
         System.out.println("Announcing new winner");
         state.goToNextChallenge();
-        simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("win", winnerUsername));
+        simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("win", winnerUsername, state.getLeaderboard()));
     }
 
 
