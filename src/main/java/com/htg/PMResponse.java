@@ -4,19 +4,19 @@ package com.htg;
  * Created by Morten on 22/04/2017.
  */
 public class PMResponse {
-    private String status;
+    private String message;
 
     public PMResponse() {};
 
     public PMResponse(String status) {
-        this.status = status;
+        this.message = status;
     }
 
-    public String getStatus() {
-        return status;
+    public String getMessage() {
+        return message;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

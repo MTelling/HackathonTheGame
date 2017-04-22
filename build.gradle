@@ -41,5 +41,6 @@ dependencies {
     compile("org.webjars:stomp-websocket:2.3.3")
     compile("org.webjars:bootstrap:3.3.7")
     compile("org.webjars:jquery:3.1.0")
+    compile("org.webjars:requirejs:2.3.1")
     compile("com.google.code.gson:gson:2.5")
 }

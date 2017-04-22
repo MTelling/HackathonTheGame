@@ -1,7 +1,7 @@
 package com.htg;
 
 import com.google.gson.Gson;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+import com.sun.tools.internal.jxc.SchemaGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -68,7 +68,6 @@ public class PMController {
 
         // Build result
         String output = runtimeResults[0];
-
         // Check if all tests are completed
         RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
         if ( runnerResult.isSuccess() ) {
@@ -76,8 +75,28 @@ public class PMController {
             state.updateUserScore(sessionID, 1);
         }
 
+        return new PMResponse(createOutputString(runnerResult));
+    }
 
-        return new PMResponse(output);
+    private String createOutputString(RunnerResult runnerResult) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Passed Tests: ").append(runnerResult.getPassedTests()).append("\n");
+
+        if (runnerResult.getErrors().size() > 0) {
+            stringBuilder.append("Tests: ").append("\n");
+            runnerResult.getErrors().forEach((error) -> {
+                stringBuilder.append(error).append("\n");
+            });
+        }
+
+        if (runnerResult.getRuntimeErrors().size() > 0) {
+            stringBuilder.append("Runtime Errors: ").append("\n");
+            runnerResult.getRuntimeErrors().forEach((error) -> {
+                stringBuilder.append(error).append("\n");
+            });
+        }
+
+        return stringBuilder.toString();
     }
 
 
