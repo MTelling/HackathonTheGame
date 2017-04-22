@@ -1,7 +1,6 @@
 package com.htg;
 
 import com.google.gson.Gson;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -41,7 +40,7 @@ public class PMController {
                 className = classNamePrefix + sessionID,
                 fileName = className + ".java";
 
-
+        code = "package Testing; " + code;
         code = code.replace("public class Program", "public class " + className);
 
         // Write code to java file
@@ -71,12 +70,33 @@ public class PMController {
 
         // Check if all tests are completed
         RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
-        if ( runnerResult.isSuccess() ){
+        if ( runnerResult.isSuccess() ) {
             announceWin(state.getUser(sessionID).getName());
             state.updateUserScore(sessionID, 1);
         }
 
-        return new PMResponse(output);
+        return new PMResponse(createOutputString(runnerResult));
+    }
+
+    private String createOutputString(RunnerResult runnerResult) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Passed Tests: ").append(runnerResult.getPassedTests()).append("\n");
+
+        if (runnerResult.getErrors().size() > 0) {
+            stringBuilder.append("Tests: ").append("\n");
+            runnerResult.getErrors().forEach((error) -> {
+                stringBuilder.append(error).append("\n");
+            });
+        }
+
+        if (runnerResult.getRuntimeErrors().size() > 0) {
+            stringBuilder.append("Runtime Errors: ").append("\n");
+            runnerResult.getRuntimeErrors().forEach((error) -> {
+                stringBuilder.append(error).append("\n");
+            });
+        }
+
+        return stringBuilder.toString();
     }
 
 
@@ -107,7 +127,7 @@ public class PMController {
     public void announceWin(String winnerUsername) {
         System.out.println("Announcing new winner");
         state.goToNextChallenge();
-        simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("win", winnerUsername));
+        simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("win", winnerUsername, state.getLeaderboard()));
     }
 
 

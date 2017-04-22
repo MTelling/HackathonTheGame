@@ -2,6 +2,7 @@ package com.htg;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -12,7 +13,7 @@ public class ServerState {
     private ChallengeDescription currentChallengeDescription = challengeServer.getNextChallengeDescription();
     private HashMap<String, User> sessionIds = new HashMap<>();
     private HashMap<String, User> users = new HashMap<>();
-    private PriorityQueue<User> leaderBoard = new PriorityQueue<>(Comparator.comparingInt(User::getScore));
+    private PriorityQueue<User> leaderboard = new PriorityQueue<>(Comparator.comparingInt(User::getScore));
 
     /**
      * TODO: maybe add time limit on challenges?
@@ -29,7 +30,7 @@ public class ServerState {
 
         users.put(usernameInLower, user);
         sessionIds.put(sessionId, user);
-        leaderBoard.add(user);
+        leaderboard.add(user);
 
         return true;
     }
@@ -42,9 +43,18 @@ public class ServerState {
 
     synchronized public void updateUserScore(String sessionId, int i){
         User user = getUser(sessionId);
-        leaderBoard.remove(user);
+        leaderboard.remove(user);
         user.addScore(i);
-        leaderBoard.add(user);
+        leaderboard.add(user);
+    }
+
+    synchronized ArrayList<User> getLeaderboard(){
+        ArrayList<User> leaderboard = new ArrayList<>();
+        User curr;
+        while((curr = this.leaderboard.poll()) != null)
+            leaderboard.add(curr);
+        this.leaderboard.addAll(leaderboard);
+        return leaderboard;
     }
 
 
