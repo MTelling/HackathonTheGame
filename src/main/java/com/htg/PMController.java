@@ -10,10 +10,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -35,42 +32,34 @@ public class PMController {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
 
         System.out.println("In the pmcontroller");
-
+        String[][] compileResults;
 
         String  code = pmRequest.getCode(),
                 fileName = sessionID + ".java",
-                path = Paths.get("").toAbsolutePath().toString() + "\\Testing\\";
+                testingPath = "Testing",
+                compilePath = "",
+                path = Paths.get("").toAbsolutePath().toString();
 
         // Write code to java file
-        try(  PrintWriter out = new PrintWriter( "Testing/" + fileName ) ){ out.println( code ); }
+        try(  PrintWriter out = new PrintWriter( testingPath + "/" + fileName ) ){ out.println( code ); }
 
-        // Compile code to class file
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.command( "javac", path + fileName );
-        Process proc = builder.start();
-        BufferedReader output = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-        proc.waitFor();
-
-        // If code fails compiling, return some sort of error for that
-        if ( output.lines().toArray().length > 0 ) {
-            System.out.println("ERROR COMPILING");
-            return new PMResponse("ERROR COMPILING");
+        // Compiles given code, returns if it failed compiling
+        if ( compile("javac", path  + "/" + testingPath + "/" + fileName)[1].length > 0 ) {
+            System.out.println("COMPILING ERROR");
+            return new PMResponse("COMPILING ERROR");
         }
-
-        // Code could compile, run tests and return results
-        builder.command("jar", "");
-        proc = builder.start();
-        output = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-        proc.waitFor();
-
-        // Debug log
-        System.out.println("Process completed");
-        System.out.println(Arrays.toString(output.lines().toArray()));
+        // Runs tests
+        compileResults = compile("java", "-jar", path + "/" + compilePath + "/compiler.jar");
+        // If stuff fuck up, blame Tobias
+        if ( compileResults[1].length > 0 ) {
+            System.out.println("SERVER ERROR");
+            return new PMResponse("SERVER ERROR");
+        }
 
         // Build result
         StringBuilder result = new StringBuilder();
-        for(Object s : output.lines().toArray())
-            result.append((String) s);
+        for(String s : compileResults[0])
+            result.append(s);
 
         // Check if all tests are completed
         boolean hasWon = result.toString().split(",")[0].split(" ")[1].equals("true");
@@ -78,6 +67,17 @@ public class PMController {
             announceWin(state.getUser(sessionID).getName());
 
         return new PMResponse(result.toString());
+    }
+
+
+    private String[][] compile(String... args) throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder();
+        pb.command(args);
+        Process proc = pb.start();
+        BufferedReader errors = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+        BufferedReader output = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        proc.waitFor();
+        return new String[][]{(String[])output.lines().toArray(), (String[])errors.lines().toArray()};
     }
 
 
