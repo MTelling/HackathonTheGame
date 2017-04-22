@@ -19,6 +19,8 @@ export default class Login extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log(this.context.store);
+    this.context.store.login(this.state.value);
     alert("Submit username \"" + this.state.value + "\"");
   }
 
@@ -36,3 +38,7 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.contextTypes = {
+  store: React.PropTypes.object,
+};

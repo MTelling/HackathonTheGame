@@ -1,0 +1,32 @@
+{
+  "name": "Reversing input",
+  "description": "Given a string as input, return the string with the characters in the reverse order.",
+  "filename": "Challenge_Four",
+  "tests": [
+    {
+      "arguments": [
+        "Copenhacks"
+      ],
+      "expectedReturns": [
+        "skcahnepoC"
+      ]
+    },
+    {
+      "arguments": [
+        "Major League Hacking"
+      ],
+      "expectedReturns": [
+        "ginkcaH eugaeL rojaM"
+      ]
+    },
+    {
+      "arguments": [
+        "Bloomberg"
+      ],
+      "expectedReturns": [
+        "grebmoolB"
+      ]
+    }
+  ],
+  "initialCode": "package Testing;\n\npublic class Program {\n\tpublic Object[] run(String[] args) {\n\t\treturn new Object[] {-1};\n\t}\n}"
+}
