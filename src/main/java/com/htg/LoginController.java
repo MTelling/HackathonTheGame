@@ -21,7 +21,7 @@ public class LoginController {
     public LoginResponse login(LoginRequest message, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
         User user = new User(message.getUsername());
-        if (serverState.addUser(user)) {
+        if (serverState.addUser(sessionID, user)) {
             return new LoginResponse("success");
         } else {
             return new LoginResponse("exists");

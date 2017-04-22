@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 @Component
 public class ServerState {
-    private Game currentGame = null;
+    private Game currentGame = new Game("lol","This is a test challenge for testing");
     private HashMap<String, User> sessionIds = new HashMap<>();
     private HashMap<String, User> users = new HashMap<>();
     /**

@@ -8,12 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
-    @Autowired
-    private static ServerState state;
 
 	public static void main(String[] args) {
 
 		SpringApplication.run(Application.class, args);
-		state.setCurrentGame(new Game("This is a test challenge for testing"));
 	}
 }
