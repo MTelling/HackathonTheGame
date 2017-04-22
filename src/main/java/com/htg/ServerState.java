@@ -1,7 +1,6 @@
 package com.htg;
 
 import java.util.HashMap;
-import java.util.function.Function;
 
 public class ServerState {
     private Game currentGame = null;
@@ -12,17 +11,18 @@ public class ServerState {
     private long challengeStartTime;
     private long challengeEndTime;
 
-    synchronized void addUser( User user ){
+    synchronized boolean addUser( User user ){
         if(users.containsKey(user.getName()))
-            return;
-        users.put(user.getName(), user);
+            return false;
+        users.put(user.getName (), user);
+        return true;
     }
 
-    public Game getCurrentGame() {
+    public Game getCurrentGame () {
         return currentGame;
     }
 
-    public void setCurrentGame(Game currentGame) {
+    public void setCurrentGame (Game currentGame) {
         this.currentGame = currentGame;
     }
 }
