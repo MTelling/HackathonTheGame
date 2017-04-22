@@ -19,6 +19,7 @@
     <orderEntry type="library" name="Gradle: org.webjars:stomp-websocket:2.3.3" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:bootstrap:3.3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:jquery:3.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-devtools:1.5.2.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.2.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:8.5.11" level="project" />
