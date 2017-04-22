@@ -34,6 +34,7 @@ public class Launcher {
         }
 
         if(challenge != null) {
+            Result result = new Result();
             try {
                 URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
                 Class<?> aClass = Class.forName("Testing.Program", true, classLoader);
@@ -44,7 +45,7 @@ public class Launcher {
                     Test test = challenge.getTests().get(i);
                     Object[] actual = (Object[]) method.invoke(prg, new Object[]{test.getArguments()});
                     if(actual.length != test.getExpectedReturns().length) {
-                        System.out.println("Error in test " + (i+1) + ": Number of returned variables is wrong");
+                        result.errors.add("Error in test " + (i+1) + ": Number of returned variables is wrong");
                     } else {
                         for(int k = 0; k < test.getExpectedReturns().length; k++) {
                             Object expected = test.getExpectedReturns()[k];
@@ -52,11 +53,17 @@ public class Launcher {
                                 expected = Integer.parseInt(expected.toString().replace(".0", ""));
                             }
                             if(!actual[k].equals(expected)) {
-                                System.out.println("Error in test " + (i+1) + ": " + actual[k] + " should be " + expected);
+                                result.errors.add("Error in test " + (i+1) + ": " + actual[k] + " should be " + expected);
+                            } else {
+                                result.passedTests += 1;
                             }
                         }
                     }
                 }
+                if(result.passedTests == challenge.getTests().size()) {
+                    result.success = true;
+                }
+                System.out.println(gson.toJson(result, Result.class));
             } catch (Exception e) {
                 e.printStackTrace();
             }
