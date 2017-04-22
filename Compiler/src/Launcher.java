@@ -19,8 +19,8 @@ public class Launcher {
         Result result = new Result();
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.setPrettyPrinting().serializeNulls().create();
-        if(args.length < 1) {
-            result.compilerErrors.add("Error: Please supply name of program to test");
+        if(args.length < 2) {
+            result.runtimeErrors.add("Error: Please supply name of the challenge as well as the name of the class file as arguments");
             System.out.println(gson.toJson(result, Result.class));
             System.exit(0);
         }
@@ -33,7 +33,7 @@ public class Launcher {
         try {
             challenge = gson.fromJson(new BufferedReader(new FileReader(root.getAbsolutePath() + "/Testing/Tests/" + args[0] + ".json")), Challenge.class);
         } catch (FileNotFoundException e) {
-            result.compilerErrors.add(e.getMessage());
+            result.runtimeErrors.add(e.getMessage());
             System.out.println(gson.toJson(result, Result.class));
             System.exit(0);
         }
@@ -43,12 +43,12 @@ public class Launcher {
             java.lang.reflect.Method method = null;
             try {
                 URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
-                Class<?> aClass = Class.forName("Testing.Program", true, classLoader);
+                Class<?> aClass = Class.forName("Testing." + args[1], true, classLoader);
                 prg = aClass.newInstance();
 
                 method = aClass.getMethod("run", String[].class);
             } catch (Exception e) {
-                result.compilerErrors.add(e.getMessage());
+                result.runtimeErrors.add(e.getMessage());
                 System.out.println(gson.toJson(result, Result.class));
                 System.exit(0);
             }
@@ -63,7 +63,7 @@ public class Launcher {
                     }
                 } catch (TimeoutException ex) {
                     future.cancel(true);
-                    result.compilerErrors.add("Error in test " + (i+1) + ": Program took too long to run!");
+                    result.runtimeErrors.add("Error in test " + (i+1) + ": Program took too long to run!");
                     System.out.println(gson.toJson(result, Result.class));
                     System.exit(0);
                 } catch (InterruptedException | ExecutionException e) {

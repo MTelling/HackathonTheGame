@@ -9,6 +9,6 @@ public class Result {
     boolean success = false;
     int passedTests = 0;
     List<String> errors = new ArrayList<>();
-    List<String> compilerErrors = new ArrayList<>();
+    List<String> runtimeErrors = new ArrayList<>();
 
 }
