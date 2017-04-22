@@ -143,16 +143,13 @@ function hideLoginError() {
     $("#loginErrorContainer").hide();
 }
 
-export default class Store {
-  connect(){
-    connect();
-  }
-
-
-}
+var user = {
+  username: ""
+};
 
 module.exports = function () {
   return {
+    user: user,
     connect: function () {
       var socket = new SockJS('/htg');
       stompClient = Stomp.over(socket);
@@ -164,8 +161,22 @@ module.exports = function () {
         stompClient.send("/app/checkLogin", {}, JSON.stringify({"username":""}));
       });
     },
-    login: function(username) {
+    login: function(username, router) {
        console.log("Trying to login as " + username);
+       stompClient.subscribe('/user/queue/login', function (status) {
+         var status = JSON.parse(status.body).status;
+           if (status === "success") {
+              router.push('/game');
+              user.username = username;
+              // GUI
+              showGame();
+               // This is socket stuff
+              beginGame();
+           } else if (status === "exists") {
+               // GUI
+              showLoginError();
+           }
+       });
        stompClient.send("/app/login", {}, JSON.stringify({"username": username}));
     }
   };
