@@ -57,7 +57,6 @@ function handleNewChallenge() {
 
 function unsubscribeCheckLogin() {
     stompClient.unsubscribe('/user/queue/checkLogin');
-
 }
 
 function unsubscribeLogin() {
@@ -82,25 +81,6 @@ function handlePageRefresh(status) {
 
 function unsubscribePM() {
     stompClient.unsubscribe('/user/queue/pm');
-}
-
-function connect() {
-    var socket = new SockJS('/htg');
-    stompClient = Stomp.over(socket);
-
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-
-        subscribeToCheckLogin();
-        stompClient.send("/app/checkLogin", {}, JSON.stringify({"username":""}));
-
-    });
-}
-
-function login(username) {
-    console.log("Trying to login as " + username);
-    stompClient.send("/app/login", {}, JSON.stringify({"username": username}));
-
 }
 
 function handleLogin(status) {
@@ -163,26 +143,49 @@ function hideLoginError() {
     $("#loginErrorContainer").hide();
 }
 
-
-
-
-$(document).ready(function () {
-
+export default class Store {
+  connect(){
     connect();
-
-    $("form").on('submit', function (e) {
-        e.preventDefault();
-    });
-
-    $( "#loginbtn" ).click(function() {
-        login($( "#username" ).val());
-    });
-
-    $( "#winbtn" ).click(function() {
-        stompClient.send("/app/pm", {}, JSON.stringify({"code": "package Testing;\n\npublic class Program {\n\tpublic Object[] run(String[] args) {\n\t\treturn new Object[] {Integer.parseInt(args[0]) + Integer.parseInt(args[1])};\n\t}\n}"}));
-    });
+  }
 
 
-});
+}
 
+module.exports = function () {
+  return {
+    connect: function () {
+      var socket = new SockJS('/htg');
+      stompClient = Stomp.over(socket);
 
+      stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+
+        subscribeToCheckLogin();
+        stompClient.send("/app/checkLogin", {}, JSON.stringify({"username":""}));
+      });
+    },
+    login: function(username) {
+       console.log("Trying to login as " + username);
+       stompClient.send("/app/login", {}, JSON.stringify({"username": username}));
+    }
+  };
+};
+//
+// $(document).ready(function () {
+//
+//     connect();
+//
+//     $("form").on('submit', function (e) {
+//         e.preventDefault();
+//     });
+//
+//     $( "#loginbtn" ).click(function() {
+//         login($( "#username" ).val());
+//     });
+//
+//     $( "#winbtn" ).click(function() {
+//         stompClient.send("/app/pm", {}, JSON.stringify({"code": "package Testing;\n\npublic class Program {\n\tpublic Object[] run(String[] args) {\n\t\treturn new Object[] {Integer.parseInt(args[0]) + Integer.parseInt(args[1])};\n\t}\n}"}));
+//     });
+//
+//
+// });
