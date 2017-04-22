@@ -1,47 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello, Spring!</title>
+    <title>HackathonTheGame</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/main.css" rel="stylesheet">
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    <script src="/app.js"></script>
+    <link href="css/main.css" rel="stylesheet">
 </head>
 <body>
-    <div id="root">React Root</div>
-    <noscript>
-        <h2 style="color: #ff0000">
-            Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-            enabled. Please enable Javascript and reload this page!
-        </h2>
-    </noscript>
-
-    <div id="loginContainer" style="display:none">
-        <div id="loginErrorContainer" style="display:none">
-            <p>User name is already in use. Try another!</p>
-        </div>
-
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="loginbtn">Input username:</label>
-                <input type="text" id="username" class="form-control" placeholder="Your name here...">
-                <button id="loginbtn" class="btn btn-default" type="submit">Login</button>
-            </div>
-        </form>
-    </div>
-
-    <div id="gameContainer" style="display:none;">
-        <h1>Hello, Spring!</h1>
-
-        <form class="form-inline">
-            <div class="form-group">
-                <button id="winbtn" class="btn btn-default" type="submit">WIN!</button>
-            </div>
-        </form>
-    </div>
-    
+    <div id="root"></div>
     <script src="dist/app-bundle.js"></script>
+    <noscript>
+      <h2 style="color: #ff0000">
+          Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+          enabled. Please enable Javascript and reload this page!
+      </h2>
+    </noscript>
 </body>
 </html>

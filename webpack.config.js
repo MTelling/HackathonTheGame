@@ -42,12 +42,12 @@ module.exports = {
         {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&amp;mimetype=image/svg+xml'}
       ],
     },
-    // resolve: {
-    //   root: [
-    //     path.resolve(ROOT, 'javascript'),
-    //     path.resolve(ROOT, 'css')
-    //   ],
-    //   extensions: ['', '.js', '.jsx']
-    // },
+    resolve: {
+      // alias: [
+      //   path.resolve(ROOT, 'js'),
+      //   path.resolve(ROOT, 'css'),
+      // ],
+      extensions: ['*', '.js', '.jsx']
+    },
     plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NoEmitOnErrorsPlugin()]
 };
