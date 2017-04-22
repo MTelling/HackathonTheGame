@@ -2,19 +2,19 @@ package com.htg;
 
 public class GameResponse {
 
-    private Game status;
+    private Challenge status;
 
     public GameResponse(){};
 
-    public GameResponse(Game status) {
+    public GameResponse(Challenge status) {
         this.status = status;
     }
 
-    public Game getStatus() {
+    public Challenge getStatus() {
         return status;
     }
 
-    public void setStatus(Game status) {
+    public void setStatus(Challenge status) {
         this.status = status;
     }
 

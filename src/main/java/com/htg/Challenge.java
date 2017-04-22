@@ -2,13 +2,14 @@ package com.htg;
 
 import java.util.ArrayList;
 
-public class Game {
+public class Challenge {
 
-    private String description, title;
+    private String description, internalName, externalName;
     private ArrayList<Problem> problems = new ArrayList<>();
 
-    public Game(String title, String description) {
-        this.title = title;
+    public Challenge(String internalName, String externalName, String description) {
+        this.internalName = internalName;
+        this.externalName = externalName;
         this.description = description;
     }
 
@@ -32,16 +33,24 @@ public class Game {
         return inputs;
     }
 
-    public Game copy() {
-        return new Game(getTitle(), getDescription());
+    public Challenge copy() {
+        return new Challenge(getInternalName(), getExternalName(), getDescription());
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getTitle() {
-        return title;
+    public String getInternalName() {
+        return internalName;
+    }
+
+    public String getExternalName() {
+        return externalName;
+    }
+
+    public void setExternalName(String externalName) {
+        this.externalName = externalName;
     }
 }
 

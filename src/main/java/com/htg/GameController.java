@@ -17,7 +17,7 @@ public class GameController {
     public GameResponse gameResponse(GameRequest gameRequest, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
 
-        return new GameResponse(state.getCurrentGame());
+        return new GameResponse(state.getCurrentChallenge());
     }
 
 }

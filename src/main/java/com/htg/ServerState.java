@@ -2,14 +2,11 @@ package com.htg;
 
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.function.Function;
 
 @Component
 public class ServerState {
-    private Game currentGame = new Game("lol","This is a test challenge for testing");
+    private Challenge currentChallenge = new Challenge("lol","This is a test challenge for testing");
     private HashMap<String, User> sessionIds = new HashMap<>();
     private HashMap<String, User> users = new HashMap<>();
     /**
@@ -36,12 +33,12 @@ public class ServerState {
         return null;
     }
 
-    synchronized public Game getCurrentGame () {
-        return currentGame;
+    synchronized public Challenge getCurrentChallenge() {
+        return currentChallenge;
     }
 
-    synchronized public void setCurrentGame (Game currentGame) {
-        this.currentGame = currentGame;
+    synchronized public void setCurrentChallenge(Challenge currentChallenge) {
+        this.currentChallenge = currentChallenge;
     }
 }
 
