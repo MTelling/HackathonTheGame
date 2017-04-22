@@ -1,21 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HackathonTheGame</title>
+    <title>Hello, Spring!</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    <link href="css/main.css" rel="stylesheet">
+    <script src="/app.js"></script>
 </head>
 <body>
-    <div id="root"></div>
-    <script src="dist/app-bundle.js"></script>
-    <noscript>
-      <h2 style="color: #ff0000">
-          Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-          enabled. Please enable Javascript and reload this page!
-      </h2>
-    </noscript>
+<div id="root">React Root</div>
+<noscript>
+    <h2 style="color: #ff0000">
+        Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+        enabled. Please enable Javascript and reload this page!
+    </h2>
+</noscript>
+
+<div id="loginContainer" style="display:none">
+    <div id="loginErrorContainer" style="display:none">
+        <p>User name is already in use. Try another!</p>
+    </div>
+
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="loginbtn">Input username:</label>
+            <input type="text" id="username" class="form-control" placeholder="Your name here...">
+            <button id="loginbtn" class="btn btn-default" type="submit">Login</button>
+        </div>
+    </form>
+</div>
+
+<div id="gameContainer" style="display:none;">
+    <h1>Hello, Spring!</h1>
+
+    <form class="form-inline">
+        <div class="form-group">
+            <button id="winbtn" class="btn btn-default" type="submit">WIN!</button>
+        </div>
+    </form>
+
+    <div id="challengeContainer">
+        <h3>Challenge Name</h3>
+        <span id="challengeName"></span>
+        <br/>
+        <h3>Challenge Description</h3>
+        <span id="challengeDescription"></span>
+        <br/>
+        <h3>Challenge Initial Code</h3>
+        <span id="challengeInitialCode"></span>
+    </div>
+</div>
+
+<script src="dist/app-bundle.js"></script>
 </body>
 </html>
