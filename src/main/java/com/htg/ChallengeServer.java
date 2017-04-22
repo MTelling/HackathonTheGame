@@ -18,6 +18,8 @@ public class ChallengeServer {
     public ChallengeServer() {
         challengeNames.add("Challenge_One");
         challengeNames.add("Challenge_Two");
+        challengeNames.add("Challenge_Three");
+        challengeNames.add("Challenge_Four");
     }
 
     public ChallengeDescription getNextChallengeDescription() {

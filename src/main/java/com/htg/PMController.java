@@ -41,7 +41,7 @@ public class PMController {
                 className = classNamePrefix + sessionID,
                 fileName = className + ".java";
 
-
+        code = "package Testing; " + code;
         code = code.replace("public class Program", "public class " + className);
 
         // Write code to java file
