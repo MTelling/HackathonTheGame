@@ -1,7 +1,6 @@
 package com.htg;
 
 import com.google.gson.Gson;
-import com.sun.tools.internal.jxc.SchemaGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -68,6 +67,7 @@ public class PMController {
 
         // Build result
         String output = runtimeResults[0];
+
         // Check if all tests are completed
         RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
         if ( runnerResult.isSuccess() ) {
@@ -127,7 +127,7 @@ public class PMController {
     public void announceWin(String winnerUsername) {
         System.out.println("Announcing new winner");
         state.goToNextChallenge();
-        simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("win", winnerUsername));
+        simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("win", winnerUsername, state.getLeaderboard()));
     }
 
 
