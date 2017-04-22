@@ -11,7 +11,7 @@ public class Game {
         this.description = description;
     }
 
-    synchronized public void addProblem (String input, String output) {
+    public void addProblem (String input, String output) {
         problems.add( new Problem(input, output) );
     }
 
@@ -40,19 +40,3 @@ public class Game {
     }
 }
 
-class Problem {
-    private String input, output;
-
-    Problem (String input, String output) {
-        this.input = input;
-        this.output = output;
-    }
-
-    boolean correctSolution (String yourResult ){
-        return yourResult.equals(output);
-    }
-
-    public String getInput () {
-        return input;
-    }
-}
