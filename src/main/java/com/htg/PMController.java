@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 
 @Controller
@@ -29,7 +30,8 @@ public class PMController {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
 
         System.out.println("In the pmcontroller");
-        Object[][] compileResults;
+        String[] compileResults;
+        String[] runtimeResults;
 
         String  code = pmRequest.getCode(),
                 testingPath = "Testing",
@@ -47,46 +49,56 @@ public class PMController {
 
 
         // Compiles given code, returns if it failed compiling
-        if ( run("javac", path  + "/" + testingPath + "/" + fileName)[1].length > 0 ) {
-            System.out.println("COMPILING ERROR");
-            return new PMResponse("COMPILING ERROR");
+
+        compileResults = run("javac", path  + "/" + testingPath + "/" + fileName);
+        System.out.println("Compile result: " + Arrays.toString(compileResults));
+        if (compileResults[1].length() > 0) {
+            return new PMResponse(compileResults[1]);
         }
 
         // Runs tests
         System.out.println(path + "Compiler.jar");
-        compileResults = run("java", "-jar", path + "/Compiler.jar", state.getCurrentChallengeDescription().getFilename(), className);
-        // If stuff fuck up, blame Tobias
-        for (int i = 0; i < compileResults.length; i++) {
-            System.out.println(compileResults[i].toString());
-        }
+        runtimeResults = run("java", "-jar", path + "/Compiler.jar", state.getCurrentChallengeDescription().getFilename(), className);
+        System.out.println("Run result: " + Arrays.toString(runtimeResults));
 
-        if ( compileResults[1].length > 0 ) {
-            System.out.println("SERVER ERROR");
-            return new PMResponse("SERVER ERROR");
+        // If there are any errors, show them.
+        if ( runtimeResults[1].length() > 0 ) {
+            return new PMResponse(runtimeResults[1]);
         }
 
         // Build result
-        StringBuilder result = new StringBuilder();
-        for(Object s : compileResults[0])
-            result.append((String)s);
+        String output = runtimeResults[0];
 
         // Check if all tests are completed
-        RunnerResult runnerResult = new Gson().fromJson(result.toString(), RunnerResult.class);
+        RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
         if ( runnerResult.isSuccess() )
             announceWin(state.getUser(sessionID).getName());
 
-        return new PMResponse(result.toString());
+        return new PMResponse(output);
     }
 
 
-    private Object[][] run(String... args) throws IOException, InterruptedException {
+    private String[] run(String... args) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder();
         pb.command(args);
         Process proc = pb.start();
         BufferedReader errors = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
         BufferedReader output = new BufferedReader(new InputStreamReader(proc.getInputStream()));
         proc.waitFor();
-        return new Object[][]{output.lines().toArray(), errors.lines().toArray()};
+
+        StringBuilder errorBuilder = new StringBuilder();
+        StringBuilder outputBuilder = new StringBuilder();
+
+        String currentLine = null;
+        while ((currentLine = errors.readLine()) != null) {
+            errorBuilder.append(currentLine);
+        }
+
+        while ((currentLine = output.readLine()) != null) {
+            outputBuilder.append(currentLine);
+        }
+
+        return new String[]{outputBuilder.toString(), errorBuilder.toString()};
     }
 
 
