@@ -10,6 +10,7 @@ function subscribeToPM() {
 function subscribeToLogin() {
     stompClient.subscribe('/user/queue/login', function (status) {
         var status = JSON.parse(status.body).status;
+        handleLogin(status);
     });
 }
 
@@ -20,6 +21,18 @@ function subscribeToGame() {
     });
 }
 
+function unsubscribeLogin() {
+    stompClient.unsubscribe('/user/queue/login');
+}
+
+function unsubscribeGame() {
+    stompClient.unsubscribe('/topic/game');
+}
+
+function unsubscribePM() {
+    stompClient.unsubscribe('/user/queue/pm');
+}
+
 function connect() {
     var socket = new SockJS('/htg');
     stompClient = Stomp.over(socket);
@@ -28,10 +41,7 @@ function connect() {
         console.log('Connected: ' + frame);
 
 
-
-
-
-
+        subscribeToLogin();
 
 
         //stompClient.send("/app/game", {}, JSON.stringify({}));
@@ -42,6 +52,7 @@ function connect() {
 }
 
 function login(username) {
+    console.log("Trying to login as " + username);
     stompClient.send("/app/login", {}, JSON.stringify({"username": username}));
 
 }
@@ -50,15 +61,44 @@ function handleLogin(status) {
     console.log("Got login status " + status);
     if (status === "success") {
 
-    } else if (status === "exists") {
+        // GUI
+        hideLogin();
+        hideLoginError();
+        showGame();
 
+
+        // This is socket stuff
+        unsubscribeLogin();
+        subscribeToGame();
+        subscribeToPM();
+
+
+    } else if (status === "exists") {
+        // GUI
+        showLoginError();
     }
+}
+
+function hideLogin() {
+    $("#loginContainer").hide();
+}
+
+function showGame() {
+    $("#gameContainer").show();
+}
+
+function showLoginError() {
+    $("#loginErrorContainer").show();
+}
+
+function hideLoginError() {
+    $("#loginErrorContainer").hide();
 }
 
 
 
 
-(document).ready(function () {
+$(document).ready(function () {
 
     connect();
 

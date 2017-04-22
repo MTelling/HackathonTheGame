@@ -18,9 +18,12 @@ public class ServerState {
     private long challengeEndTime;
 
     synchronized boolean addUser( User user ){
+        String usernameInLower = user.getName().toLowerCase();
+
         if(users.containsKey(user.getName()))
             return false;
-        users.put(user.getName (), user);
+
+        users.put(usernameInLower, user);
         return true;
     }
 

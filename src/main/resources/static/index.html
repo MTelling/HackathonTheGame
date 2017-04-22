@@ -17,14 +17,23 @@
         </h2>
     </noscript>
 
-    <form class="form-inline">
-        <div class="form-group">
-            <label for="loginbtn">Input username:</label>
-            <input type="text" id="username" class="form-control" placeholder="Your name here...">
-            <button id="loginbtn" class="btn btn-default" type="submit">Login</button>
+    <div id="loginContainer">
+        <div id="loginErrorContainer" style="display:none">
+            <p>User name is already in use. Try another!</p>
         </div>
-    </form>
 
-    <h1>Hello, Spring!</h1>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="loginbtn">Input username:</label>
+                <input type="text" id="username" class="form-control" placeholder="Your name here...">
+                <button id="loginbtn" class="btn btn-default" type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="gameContainer" style="display:none;">
+        <h1>Hello, Spring!</h1>
+    </div>
+
 </body>
 </html>
