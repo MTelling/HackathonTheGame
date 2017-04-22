@@ -21,6 +21,13 @@ function subscribeToLogin() {
     });
 }
 
+function subscribeToNews() {
+    stompClient.subscribe('/topic/news', function (news) {
+        console.log("Got news!");
+        console.log(JSON.parse(news.body).news);
+    });
+}
+
 function subscribeToGame() {
     stompClient.subscribe('/topic/game', function (gameResponse) {
         console.log("Got response!");
@@ -44,7 +51,9 @@ function unsubscribeGame() {
 function handlePageRefresh(status) {
     if (status === "alreadyIn") {
         showGame();
+        beginGame();
     } else {
+        showLogin();
         subscribeToLogin();
     }
 
@@ -90,9 +99,7 @@ function handleLogin(status) {
 
 
         // This is socket stuff
-        unsubscribeLogin();
-        subscribeToGame();
-        subscribeToPM();
+        beginGame();
 
 
     } else if (status === "exists") {
@@ -105,10 +112,21 @@ function hideLogin() {
     $("#loginContainer").hide();
 }
 
+function showLogin() {
+    $("#loginContainer").show();
+}
+
 function showGame() {
     hideLogin();
     hideLoginError();
     $("#gameContainer").show();
+}
+
+function beginGame() {
+    unsubscribeLogin();
+    subscribeToPM();
+    subscribeToGame();
+    subscribeToNews();
 }
 
 function showLoginError() {
@@ -133,6 +151,11 @@ $(document).ready(function () {
     $( "#loginbtn" ).click(function() {
         login($( "#username" ).val());
     });
+
+    $( "#winbtn" ).click(function() {
+        stompClient.send("/app/pm", {}, JSON.stringify({"code": "somuchcode"}));
+    });
+
 
 });
 

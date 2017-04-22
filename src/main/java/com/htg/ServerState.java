@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 @Component
 public class ServerState {
-    private Challenge currentChallenge = new Challenge("lol","This is a test challenge for testing");
+    private Challenge currentChallenge = new Challenge("lol","test,","This is a test challenge for testing");
     private HashMap<String, User> sessionIds = new HashMap<>();
     private HashMap<String, User> users = new HashMap<>();
     /**
