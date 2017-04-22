@@ -71,4 +71,5 @@ build/
 node_modules/
 .gradle/
 .idea/
+dist/
 .DS_Store

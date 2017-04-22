@@ -21,7 +21,12 @@
     "webpack-dev-server": "^2.4.3"
   },
   "dependencies": {
+    "material-ui": "^0.17.4",
+    "monaco-editor": "^0.8.3",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "react-form": "^1.2.6",
+    "react-router": "^3.0.5",
+    "react-tap-event-plugin": "^2.0.1"
   }
 }
