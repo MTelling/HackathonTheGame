@@ -30,7 +30,7 @@ public class ServerState {
         return true;
     }
 
-    User getUser (String sessionId) {
+    synchronized User getUser (String sessionId) {
         if(sessionIds.containsKey(sessionId))
             return sessionIds.get(sessionId);
         return null;

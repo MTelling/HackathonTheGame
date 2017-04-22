@@ -7,6 +7,13 @@ function subscribeToPM() {
     });
 }
 
+function subscribeToCheckLogin() {
+    stompClient.subscribe('/user/queue/checkLogin', function (status) {
+        var status = JSON.parse(status.body).status;
+        handlePageRefresh(status);
+    });
+}
+
 function subscribeToLogin() {
     stompClient.subscribe('/user/queue/login', function (status) {
         var status = JSON.parse(status.body).status;
@@ -21,12 +28,27 @@ function subscribeToGame() {
     });
 }
 
+function unsubscribeCheckLogin() {
+    stompClient.unsubscribe('/user/queue/checkLogin');
+
+}
+
 function unsubscribeLogin() {
     stompClient.unsubscribe('/user/queue/login');
 }
 
 function unsubscribeGame() {
     stompClient.unsubscribe('/topic/game');
+}
+
+function handlePageRefresh(status) {
+    if (status === "alreadyIn") {
+        showGame();
+    } else {
+        subscribeToLogin();
+    }
+
+    unsubscribeCheckLogin();
 }
 
 function unsubscribePM() {
@@ -41,7 +63,9 @@ function connect() {
         console.log('Connected: ' + frame);
 
 
-        subscribeToLogin();
+        subscribeToCheckLogin();
+        stompClient.send("/app/checkLogin", {}, JSON.stringify({"username":""}));
+
 
 
         //stompClient.send("/app/game", {}, JSON.stringify({}));
@@ -62,8 +86,6 @@ function handleLogin(status) {
     if (status === "success") {
 
         // GUI
-        hideLogin();
-        hideLoginError();
         showGame();
 
 
@@ -84,6 +106,8 @@ function hideLogin() {
 }
 
 function showGame() {
+    hideLogin();
+    hideLoginError();
     $("#gameContainer").show();
 }
 

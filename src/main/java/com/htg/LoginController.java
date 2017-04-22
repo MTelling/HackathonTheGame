@@ -16,6 +16,18 @@ public class LoginController {
     private ServerState serverState;
 
 
+    @MessageMapping("/checkLogin")
+    @SendToUser("/queue/checkLogin")
+    public LoginResponse checklogin(LoginRequest message, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
+        String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
+        User user = serverState.getUser(sessionID);
+        if (user != null) {
+            return new LoginResponse("alreadyIn");
+        } else {
+            return new LoginResponse("newUser");
+        }
+    }
+
     @MessageMapping("/login")
     @SendToUser("/queue/login")
     public LoginResponse login(LoginRequest message, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
