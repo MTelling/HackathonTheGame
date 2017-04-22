@@ -12,12 +12,19 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class LoginController {
 
+    @Autowired
+    private ServerState serverState;
+
+
     @MessageMapping("/login")
     @SendToUser("/queue/login")
     public LoginResponse login(LoginRequest message, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
-        System.out.println("user is in logincontroller");
-        System.out.println(message.getUsername());
-        return new LoginResponse("success!");
+        User user = new User(message.getUsername());
+        if (serverState.addUser(user)) {
+            return new LoginResponse("success");
+        } else {
+            return new LoginResponse("exists");
+        }
     }
 }
