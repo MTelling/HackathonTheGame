@@ -8,11 +8,25 @@ function connect() {
         console.log('Connected: ' + frame);
 
 
-        stompClient.subscribe('/user/queue/login', function(message) {
-            console.log(JSON.parse(message.body).status);
+        stompClient.subscribe('/topic/game', function (gameResponse) {
+            console.log("Got response!");
+            console.log(JSON.parse(gameResponse.body).status);
         });
 
-        stompClient.send("/app/login", {}, JSON.stringify({'username': "test"}));
+        stompClient.subscribe('/user/queue/login', function (status) {
+            console.log("Got private response!");
+            console.log(JSON.parse(status.body).status);
+        });
+
+        stompClient.subscribe('/user/queue/pm', function (pmResponse) {
+            console.log("Got pm response!");
+            console.log(JSON.parse(pmResponse.body).status);
+        });
+
+
+        stompClient.send("/app/game", {}, JSON.stringify({}));
+        stompClient.send("/app/login", {}, JSON.stringify({"username": "morten"}));
+        stompClient.send("/app/pm", {}, JSON.stringify({"code": "somuchcode"}));
 
 
     });

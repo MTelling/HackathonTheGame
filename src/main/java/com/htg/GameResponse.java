@@ -3,13 +3,13 @@ package com.htg;
 /**
  * Created by Morten on 22/04/2017.
  */
-public class LoginResponse {
+public class GameResponse {
 
     private String status;
 
-    public LoginResponse(){};
+    public GameResponse(){};
 
-    public LoginResponse(String status) {
+    public GameResponse(String status) {
         this.status = status;
     }
 

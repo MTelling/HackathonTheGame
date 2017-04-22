@@ -3,13 +3,12 @@ package com.htg;
 /**
  * Created by Morten on 22/04/2017.
  */
-public class LoginResponse {
-
+public class PMResponse {
     private String status;
 
-    public LoginResponse(){};
+    public PMResponse() {};
 
-    public LoginResponse(String status) {
+    public PMResponse(String status) {
         this.status = status;
     }
 

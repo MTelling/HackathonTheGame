@@ -6,6 +6,8 @@ package com.htg;
 public class LoginRequest {
     private String username;
 
+    public LoginRequest(){};
+
     public LoginRequest(String username) {
         this.username = username;
     }
