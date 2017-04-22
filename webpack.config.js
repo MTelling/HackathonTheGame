@@ -5,6 +5,7 @@ var webpack = require('webpack');
 var ROOT = path.resolve(__dirname, 'src/main/resources/static');
 var SRC = path.resolve(ROOT, 'js');
 var DEST = path.resolve(__dirname, 'src/main/resources/static/dist');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const PATHS = {
   build: path.join(__dirname, 'target', 'classes', 'META-INF', 'resources', 'webjars', packageJSON.name, packageJSON.version)
@@ -49,5 +50,14 @@ module.exports = {
       // ],
       extensions: ['*', '.js', '.jsx']
     },
-    plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NoEmitOnErrorsPlugin()]
+    plugins: [
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.NoEmitOnErrorsPlugin(),
+      new CopyWebpackPlugin([
+        {
+          from: 'node_modules/monaco-editor/min/vs',
+          to: 'vs',
+        }
+      ])
+    ],
 };

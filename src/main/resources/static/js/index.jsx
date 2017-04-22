@@ -4,17 +4,26 @@ import { Router, Route, IndexRoute, Redirect, hashHistory } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AppBar from 'material-ui/AppBar';
 import Login from './components/Login';
 import Game from './components/Game';
 // import '../css/general.css';
 
+import store from './store';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.store = store();
+  }
+
+  getChildContext() {
+    return { store: this.store };
+  }
+
+  componentDidMount(){
+    this.store.connect();
   }
 
   render() {
@@ -27,6 +36,10 @@ class App extends Component {
       </MuiThemeProvider>
     );
   }
+}
+
+App.childContextTypes = {
+    store: React.PropTypes.object,
 }
 
 ReactDOM.render(

@@ -1,7 +1,6 @@
 package com.htg;
 
 import com.google.gson.Gson;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -72,8 +71,10 @@ public class PMController {
 
         // Check if all tests are completed
         RunnerResult runnerResult = new Gson().fromJson(result.toString(), RunnerResult.class);
-        if ( runnerResult.isSuccess() )
+        if ( runnerResult.isSuccess() ){
             announceWin(state.getUser(sessionID).getName());
+            state.updateUserScore(sessionID, 1);
+        }
 
         return new PMResponse(result.toString());
     }
