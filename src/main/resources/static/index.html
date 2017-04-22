@@ -6,10 +6,12 @@
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.1/require.min.js"></script>
     <link href="css/main.css" rel="stylesheet">
 </head>
 <body>
     <div id="root"></div>
+    <script> require.config({ paths: { vs: 'dist/vs' }}); </script>
     <script src="dist/app-bundle.js"></script>
     <noscript>
       <h2 style="color: #ff0000">

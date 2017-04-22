@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import { Form, Text } from 'react-form'
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import LoginForm from './LoginForm';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
+    this.state = { value: "" };
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit() {
-    console.log("Submit!!");
+  handleChange(e) {
+    this.setState({
+      value: e.target.value,
+    });
+  };
+
+  handleSubmit(e) {
+    e.preventDefault();
+    alert("Submit username \"" + this.state.value + "\"");
   }
 
   render() {
@@ -21,12 +28,10 @@ export default class Login extends Component {
           <div id="loginErrorContainer" style={{display:"none"}}>
             <p>User name is already in use. Try another!</p>
           </div>
-          <Form onSubmit={this.handleSubmit}>
-            <TextField
-              hintText="besthacker123"
-              floatingLabelText="Username" />
-            <RaisedButton className="loginButton" label="Login" type="submit"/>
-          </Form>
+          <LoginForm
+            value={this.state.value}
+            onChange={this.handleChange}
+            onSubmit={this.handleSubmit}/>
         </Paper>
     );
   }
