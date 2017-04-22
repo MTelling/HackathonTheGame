@@ -1,82 +1,162 @@
 var stompClient = null;
 
+function subscribeToPM() {
+    stompClient.subscribe('/user/queue/pm', function (pmResponse) {
+        console.log("Got pm response!");
+        console.log(JSON.parse(pmResponse.body).status);
+    });
+}
 
+function subscribeToCheckLogin() {
+    stompClient.subscribe('/user/queue/checkLogin', function (status) {
+        var status = JSON.parse(status.body).status;
+        handlePageRefresh(status);
+    });
+}
+
+function subscribeToLogin() {
+    stompClient.subscribe('/user/queue/login', function (status) {
+        var status = JSON.parse(status.body).status;
+        handleLogin(status);
+    });
+}
+
+function subscribeToNews() {
+    stompClient.subscribe('/topic/news', function (news) {
+        console.log("Got news!");
+        console.log(JSON.parse(news.body).news);
+    });
+}
+
+function subscribeToGame() {
+    stompClient.subscribe('/topic/game', function (gameResponse) {
+        console.log("Got response!");
+        console.log(JSON.parse(gameResponse.body).status);
+    });
+}
+
+function unsubscribeCheckLogin() {
+    stompClient.unsubscribe('/user/queue/checkLogin');
+
+}
+
+function unsubscribeLogin() {
+    stompClient.unsubscribe('/user/queue/login');
+}
+
+function unsubscribeGame() {
+    stompClient.unsubscribe('/topic/game');
+}
+
+function handlePageRefresh(status) {
+    if (status === "alreadyIn") {
+        showGame();
+        beginGame();
+    } else {
+        showLogin();
+        subscribeToLogin();
+    }
+
+    unsubscribeCheckLogin();
+}
+
+function unsubscribePM() {
+    stompClient.unsubscribe('/user/queue/pm');
+}
 
 function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
+    var socket = new SockJS('/htg');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
 
 
-        stompClient.subscribe('/user/queue/login', function(message) {
-            console.log(JSON.parse(message.body).message);
-            loginSucces();
-        });
+        subscribeToCheckLogin();
+        stompClient.send("/app/checkLogin", {}, JSON.stringify({"username":""}));
+
+
+
+        //stompClient.send("/app/game", {}, JSON.stringify({}));
+        //stompClient.send("/app/pm", {}, JSON.stringify({"code": "somuchcode"}));
+
 
     });
 }
 
-function disconnect() {
-    if (stompClient !== null) {
-        stompClient.disconnect();
+function login(username) {
+    console.log("Trying to login as " + username);
+    stompClient.send("/app/login", {}, JSON.stringify({"username": username}));
+
+}
+
+function handleLogin(status) {
+    console.log("Got login status " + status);
+    if (status === "success") {
+
+        // GUI
+        showGame();
+
+
+        // This is socket stuff
+        beginGame();
+
+
+    } else if (status === "exists") {
+        // GUI
+        showLoginError();
     }
-    setConnected(false);
-    console.log("Disconnected");
 }
 
-function loginSucces() {
-
-    stompClient.unsubscribe('/user/queue/login');
-
-    stompClient.subscribe('/topic/public-chat', function (greeting) {
-        showNewMessage(JSON.parse(greeting.body).content);
-    });
-
-    stompClient.subscribe('/user/queue/status', function (status) {
-        showStatus(JSON.parse(status.body).message);
-    });
-
-    $("#login-form").hide();
-    $("#main-content").show();
+function hideLogin() {
+    $("#loginContainer").hide();
 }
 
-function login() {
-    stompClient.send("/app/login", {}, JSON.stringify({'content': $("#name").val()}));
+function showLogin() {
+    $("#loginContainer").show();
 }
 
-
-function sendMessage() {
-    stompClient.send("/app/public-chat", {}, JSON.stringify({'content': $("#chat-message").val()}));
+function showGame() {
+    hideLogin();
+    hideLoginError();
+    $("#gameContainer").show();
 }
 
-function askForStatus() {
-    stompClient.send('/app/private', {}, JSON.stringify({'content': "request"}));
+function beginGame() {
+    unsubscribeLogin();
+    subscribeToPM();
+    subscribeToGame();
+    subscribeToNews();
 }
 
-function showStatus(message) {
-    $("#status-messages").append("<tr><td>" + message + "</td></tr>");
+function showLoginError() {
+    $("#loginErrorContainer").show();
+}
+
+function hideLoginError() {
+    $("#loginErrorContainer").hide();
 }
 
 
-function showNewMessage(message) {
-    $("#public-messages").append("<tr><td>" + message + "</td></tr>");
 
-}
 
 $(document).ready(function () {
 
-    console.log("Dom ready - connecting!");
     connect();
 
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
 
-    $( "#connect" ).click(function() { login(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send-message" ).click(function() { sendMessage(); });
-    $( "#send-status" ).click(function() { askForStatus(); });
+    $( "#loginbtn" ).click(function() {
+        login($( "#username" ).val());
+    });
+
+    $( "#winbtn" ).click(function() {
+        stompClient.send("/app/pm", {}, JSON.stringify({"code": "somuchcode"}));
+    });
+
+
 });
+
 
