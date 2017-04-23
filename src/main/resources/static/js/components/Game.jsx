@@ -4,10 +4,12 @@ import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import FontIcon from 'material-ui/FontIcon';
 import SvgIconFace from 'material-ui/svg-icons/action/face';
+import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
 import Editor from './Editor';
 import Output from './Output';
-import LeaderBoard from './LeaderBoard';
+import GameOver from './GameOver';
 import UserInfo from './UserInfo';
 
 export default class Game extends Component {
@@ -32,6 +34,7 @@ export default class Game extends Component {
         winner: "",
         lb: [],
       },
+      reset: false,
       submitting: false,
       code: "",
       output: "Sample Output",
@@ -40,6 +43,7 @@ export default class Game extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleUserInfo = this.handleUserInfo.bind(this);
     this.handleSubmitCode = this.handleSubmitCode.bind(this);
+    this.handleConfirmReset = this.handleConfirmReset.bind(this);
     this.handleTestLeaderBoard = this.handleTestLeaderBoard.bind(this);
   }
 
@@ -57,11 +61,11 @@ export default class Game extends Component {
           console.log("Got game description ("+challengeDescription.name+")!");
 
           if (that.state.challenge === null || challengeDescription.name !== that.state.challenge.name) {
+            challengeDescription.initialCode+="\n//type your code here...\
+            \n//return new Object[] {Integer.parseInt(args[0])+Integer.parseInt(args[1])};"
             that.setState({
               challenge: challengeDescription,
-              code: challengeDescription.initialCode +
-              "\n//type your code here...\
-              \n//return new Object[] {Integer.parseInt(args[0])+Integer.parseInt(args[1])};",
+              code: challengeDescription.initialCode,
               state: Object.assign({}, that.state.state, { ready: true }),
              });
           }
@@ -135,6 +139,13 @@ export default class Game extends Component {
     });
   }
 
+  handleConfirmReset(){
+    this.setState({
+      code: this.state.challenge.initialCode,
+      reset: false,
+    });
+  }
+
   handleSubmitCode(e) {
     e.preventDefault();
     this.setState({
@@ -181,8 +192,9 @@ export default class Game extends Component {
         <Output
           output={this.state.output}
           description={challenge.description}
+          gameState={this.state.state}
           onSubmit={this.handleSubmitCode}/>
-        <LeaderBoard
+        <GameOver
           gameState={this.state.state}
           onClose={this.handleClose}/>
         <UserInfo
@@ -199,9 +211,30 @@ export default class Game extends Component {
         </form>
 
         <RaisedButton
+          label="Reset"
+          className="submitCode"
+          onTouchTap={()=>this.setState({reset: true})}/>
+        <RaisedButton
           label="Test LB"
           className="submitCode"
           onTouchTap={this.handleTestLeaderBoard}/>
+
+        <Dialog
+            title="Reset your code?"
+            actions={[
+              <FlatButton
+                label="Cancel"
+                primary={true}
+                onTouchTap={()=>this.setState({reset: false})}/>,
+              <FlatButton
+                label="Confirm"
+                primary={true}
+                onTouchTap={this.handleConfirmReset}/>
+            ]}
+            modal={true}
+            open={this.state.reset}>
+            Your code will not be saved and your changes cannot be undone.
+          </Dialog>
       </div>
     );
   }

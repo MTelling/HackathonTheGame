@@ -14,6 +14,7 @@ export default class LoginForm extends Component {
         <TextField
           hintText="besthacker123"
           floatingLabelText="Username"
+          floatingLabelStyle={{fontWeight:"normal"}}
           value={this.props.value}
           onChange={(e)=>{ this.props.onChange(e); }}/>
         <RaisedButton className="loginButton" label="Login" type="submit"/>
