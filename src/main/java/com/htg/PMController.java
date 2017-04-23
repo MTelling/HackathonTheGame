@@ -58,7 +58,7 @@ public class PMController {
 
         // Runs tests
         System.out.println(path + "Compiler.jar");
-        runtimeResults = run("java", "-jar", path + "/Compiler.jar", state.getCurrentChallengeDescription().getFilename(), className);
+        runtimeResults = run("java", "-jar", path + "/Runner.jar", state.getCurrentChallengeDescription().getFilename(), className);
         System.out.println("Run result: " + Arrays.toString(runtimeResults));
 
         // If there are any errors, show them.
@@ -124,6 +124,15 @@ public class PMController {
         while ((currentLine = output.readLine()) != null) {
             outputBuilder.append(currentLine);
         }
+
+        try {
+            errors.close();
+            output.close();
+        } catch (Exception e) {
+            System.out.println("Couldn't close BReaders");
+            e.printStackTrace();
+        }
+
 
         return new String[]{outputBuilder.toString(), errorBuilder.toString()};
     }

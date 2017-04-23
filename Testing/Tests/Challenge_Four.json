@@ -13,7 +13,7 @@
       "arguments": [
         "Major League Hacking"
       ],
-      "expectedReturn": "ginkcaH eugaeL rojaM"
+      "expectedReturn": "gnikcaH eugaeL rojaM"
     },
     {
       "arguments": [
@@ -22,5 +22,5 @@
       "expectedReturn": "grebmoolB"
     }
   ],
-  "initialCode": "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn -1;\n\t}\n}"
+  "initialCode": "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn \"reversed string\";\n\t}\n}"
 }
