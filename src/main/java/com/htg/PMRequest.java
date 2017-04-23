@@ -5,7 +5,7 @@ package com.htg;
  */
 public class PMRequest {
     private String code;
-    private String language = "java";
+    private String language = "Java";
 
     public PMRequest(){};
 

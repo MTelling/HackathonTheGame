@@ -33,20 +33,12 @@ public class PMController {
         System.out.println("In the pmcontroller");
 
         String language = pmRequest.getLanguage(),
-                code = pmRequest.getCode(),
-                testingPath = "Testing",
-                compilePath = "",
-                path = Paths.get("").toAbsolutePath().toString(),
-                classNamePrefix = "P",
-                className = classNamePrefix + sessionID,
-                fileName = className + ".java";
-
-        language = "js";
+                code = pmRequest.getCode();
 
         switch(language){
-            case "js":
+            case "JavaScript":
                 return handleJSCode(code, sessionID);
-            case "java":
+            case "Java":
                 return handleJavaCode(code, sessionID);
             default:
                 return handleJavaCode(code, sessionID);
