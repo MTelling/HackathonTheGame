@@ -1,11 +1,12 @@
 package com.htg;
 
+import com.google.gson.Gson;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.PriorityQueue;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.*;
 
 @Component
 public class ServerState {
@@ -15,23 +16,27 @@ public class ServerState {
     private HashMap<String, User> users = new HashMap<>();
     private PriorityQueue<User> leaderboard = new PriorityQueue<>(Comparator.comparingInt(User::getScore));
 
-    /**
-     * TODO: maybe add time limit on challenges?
-     */
-
-    private long challengeStartTime;
-    private long challengeEndTime;
-
     synchronized boolean addUser( String sessionId, User user ){
-        String usernameInLower = user.getName().toLowerCase();
+        // If server was empty, but user joined, load old scores
+        if(sessionIds.size() == 0)
+            loadStoredUsers();
 
-        if(users.containsKey(user.getName()))
-        return false;
+        boolean newUser = !users.containsKey(user.getName()),
+                inactiveUser = !sessionIds.containsKey(sessionId);
 
-        users.put(usernameInLower, user);
-        sessionIds.put(sessionId, user);
-        leaderboard.add(user);
-
+        if(!newUser && !inactiveUser)
+            return false;
+        if(newUser){
+            users.put(user.getLowName(), user);
+            leaderboard.add(user);
+        }
+        if(inactiveUser)
+            sessionIds.put(sessionId, user);
+        try {
+            saveCurrentUsers();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -57,6 +62,35 @@ public class ServerState {
         return leaderboard;
     }
 
+    synchronized public void loadStoredUsers() {
+        System.out.println("Loading users...");
+        Scanner sc = null;
+        try {
+            sc = new Scanner(new File("storedUsers.json"));
+            StringBuilder builder = new StringBuilder();
+            while (sc.hasNextLine())
+                builder.append(sc.nextLine());
+            StoredUsers storedUsers = new Gson().fromJson(builder.toString(), StoredUsers.class);
+            for (User u : storedUsers.getUsers() ){
+                users.put(u.getLowName(), u);
+                leaderboard.add(u);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    synchronized public void saveCurrentUsers() throws FileNotFoundException {
+        System.out.println("Saving users...");
+        StringBuilder builder = new StringBuilder();
+        Gson gson = new Gson();
+        ArrayList<User> tempLeaderboard = getLeaderboard();
+        User[] users = new User[tempLeaderboard.size()];
+        tempLeaderboard.toArray(users);
+        builder.append("{").append("\"users\":").append(gson.toJson(users)).append("}");
+        try( PrintWriter out = new PrintWriter( "storedUsers.json" ) ) { out.println( builder.toString() ); }
+    }
+
 
     synchronized public ChallengeDescription getCurrentChallengeDescription() {
         return currentChallengeDescription;
@@ -68,3 +102,11 @@ public class ServerState {
     }
 }
 
+
+    class StoredUsers{
+    private User[] users;
+
+    public User[] getUsers() {
+        return users;
+    }
+}
