@@ -18,5 +18,8 @@
       "expectedReturn": 2
     }
   ],
-  "initialCode": "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn -1;\n\t}\n}"
+  "initialCode" : {
+    "java" : "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn -1;\n\t}\n}",
+    "javascript" : "function program(args) {\n\treturn -1;\n}"
+  }
 }

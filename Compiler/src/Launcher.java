@@ -29,8 +29,8 @@ public class Launcher {
             System.exit(0);
         }
 
-        availableCompilers.put("Java", new JavaRunner());
-        availableCompilers.put("Javascript", new JavascriptRunner());
+        availableCompilers.put("java", new JavaRunner());
+        availableCompilers.put("javascript", new JavascriptRunner());
 
         File root = new File(FileSystems.getDefault().getPath("../").toAbsolutePath().toString());
 
@@ -45,8 +45,8 @@ public class Launcher {
         }
 
         if(challenge != null) {
-            String wantedCompiler = args.length < 3 ? "Java" : args[2];
-            Runner runner = availableCompilers.getOrDefault(wantedCompiler, availableCompilers.get("Java"));
+            String wantedCompiler = args.length < 3 ? "java" : args[2];
+            Runner runner = availableCompilers.getOrDefault(wantedCompiler.toLowerCase(), availableCompilers.get("java"));
 
             CodeChecker codeChecker = runner.getCodeChecker(root, args[1]);
 
