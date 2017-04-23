@@ -62,8 +62,7 @@ export default class Game extends Component {
           console.log("Got game description ("+challengeDescription.name+")!");
 
           if (that.state.challenge === null || challengeDescription.name !== that.state.challenge.name) {
-            challengeDescription.initialCode+="\n//type your code here...\
-            \n//return new Object[] {Integer.parseInt(args[0])+Integer.parseInt(args[1])};"
+            challengeDescription.initialCode+="\n//type your code here...";
             that.setState({
               challenge: challengeDescription,
               code: challengeDescription.initialCode,
@@ -74,8 +73,6 @@ export default class Game extends Component {
 
       that.stompClient.subscribe('/user/queue/checkLogin', function (response) {
           var message = JSON.parse(response.body);
-
-          console.log(message);
 
           if (message.status === "alreadyIn") {
               that.setState({
@@ -89,9 +86,8 @@ export default class Game extends Component {
                   }),
               });
 
-
           } else {
-              console.log(that.props.router);
+              console.log("NOT LOGGED IN: " + message.status);
               that.props.router.push("/");
           }
       });
@@ -123,8 +119,13 @@ export default class Game extends Component {
           }
       });
 
-      that.stompClient.send("/app/game", {}, JSON.stringify({}));
-      that.stompClient.send("/app/checkLogin", {}, JSON.stringify({"username": ""}));
+      setTimeout(function() {
+          console.log("Running from timout!");
+
+          that.stompClient.send("/app/game", {}, JSON.stringify({}));
+          that.stompClient.send("/app/checkLogin", {}, JSON.stringify({"username": ""}));
+
+      }, 25);
 
     });
   }
@@ -230,10 +231,7 @@ export default class Game extends Component {
           label="Reset"
           className="submitCode"
           onTouchTap={()=>this.setState({reset: true})}/>
-        <RaisedButton
-          label="Test LB"
-          className="submitCode"
-          onTouchTap={this.handleTestLeaderBoard}/>
+
 
         <Dialog
             title="Reset your code?"
