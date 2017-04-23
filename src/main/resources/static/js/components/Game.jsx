@@ -43,6 +43,7 @@ export default class Game extends Component {
     this.handleUserInfo = this.handleUserInfo.bind(this);
     this.handleSubmitCode = this.handleSubmitCode.bind(this);
     this.handleConfirmReset = this.handleConfirmReset.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
     this.handleTestLeaderBoard = this.handleTestLeaderBoard.bind(this);
   }
 
@@ -144,6 +145,13 @@ export default class Game extends Component {
     this.stompClient.send("/app/pm", {}, JSON.stringify({"code": this.state.code }));
   }
 
+  handleLogout() {
+    this.stompClient.unsubscribe('/user/queue/checkLogin');
+    this.stompClient.unsubscribe('/user/queue/game');
+    console.log("unsubscribe to /user/queue/checkLogin and /user/queue/game");
+    this.props.router.push('/');
+  }
+
   handleTestLeaderBoard(){
     this.setState({
       state: {
@@ -186,6 +194,7 @@ export default class Game extends Component {
           onSubmit={this.handleSubmitCode}/>
         <GameOver
           gameState={this.state.state}
+          onExit={this.handleLogout}
           onClose={this.handleClose}/>
         <UserInfo
           username={user.username}
