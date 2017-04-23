@@ -7,12 +7,14 @@ public class LoginResponse {
 
     private String status;
     private String username;
+    private int score;
 
     public LoginResponse(){};
 
-    public LoginResponse(String status, String username) {
+    public LoginResponse(String status, String username, int score) {
         this.status = status;
         this.username = username;
+        this.score = score;
     }
 
     public String getStatus() {
@@ -29,5 +31,13 @@ public class LoginResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

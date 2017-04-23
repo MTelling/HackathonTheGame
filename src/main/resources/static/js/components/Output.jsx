@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import Paper from 'material-ui/Paper';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import LeaderBoard from './LeaderBoard';
 
 export default class Output extends Component {
   constructor(props) {
@@ -13,11 +14,9 @@ export default class Output extends Component {
   }
 
   handleChangeTab(val){
-    if(val!="submit"){
-      this.setState({
-        tab: val,
-      });
-    }
+    this.setState({
+      tab: val,
+    });
   };
 
   render() {
@@ -32,12 +31,13 @@ export default class Output extends Component {
                 Goal: {this.props.description}
               </div>
             </Tab>
-            <Tab label="Output" value="output" style={{color:"black"}}>
+            <Tab label="Leaderboard" value="lb" style={{color:"black"}}>
+              <LeaderBoard hide={true} gameState={this.props.gameState}/>
+            </Tab>
+            <Tab label="Output" value="output" style={{color:"#283593"}}>
               <div className="output">
                 {this.props.output}
               </div>
-            </Tab>
-            <Tab label="Submit" value="submit" onActive={this.props.onSubmit} style={{color:"#303F9F"}}>
             </Tab>
           </Tabs>
         </Paper>
