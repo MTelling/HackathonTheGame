@@ -7,26 +7,20 @@
       "arguments": [
         "Copenhacks"
       ],
-      "expectedReturns": [
-        "skcahnepoC"
-      ]
+      "expectedReturn": "skcahnepoC"
     },
     {
       "arguments": [
         "Major League Hacking"
       ],
-      "expectedReturns": [
-        "ginkcaH eugaeL rojaM"
-      ]
+      "expectedReturn": "ginkcaH eugaeL rojaM"
     },
     {
       "arguments": [
         "Bloomberg"
       ],
-      "expectedReturns": [
-        "grebmoolB"
-      ]
+      "expectedReturn": "grebmoolB"
     }
   ],
-  "initialCode": "public class Program {\n\tpublic Object[] run(String[] args) {\n\t\treturn new Object[] {-1};\n\t}\n}"
+  "initialCode": "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn -1;\n\t}\n}"
 }

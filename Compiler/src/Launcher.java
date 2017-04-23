@@ -7,9 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
@@ -29,7 +29,7 @@ public class Launcher {
 
         File compilerRoot = new File(Paths.get("").toString());
         String absPath = compilerRoot.getAbsolutePath();
-        File root = new File(FileSystems.getDefault().getPath("").toAbsolutePath().toString());
+        File root = new File(FileSystems.getDefault().getPath("../").toAbsolutePath().toString());
 
         Challenge challenge = null;
         try {
@@ -103,27 +103,25 @@ class CodeChecker implements Callable<String> {
     @Override
     public String call() throws Exception {
         String check = "";
-        Object[] actual = new Object[0];
+        Object actual = new Object();
         try {
-            actual = (Object[]) method.invoke(prg, new Object[]{test.getArguments()});
+            actual = method.invoke(prg, new Object[]{test.getArguments()});
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (actual.length != test.getExpectedReturns().length) {
+        if (actual == null) {
             result.errors.add("Error in test " + (round + 1) + ": Number of returned variables is wrong");
             check = "error";
         } else {
-            for (int k = 0; k < test.getExpectedReturns().length; k++) {
-                Object expected = test.getExpectedReturns()[k];
-                if (expected.toString().indexOf(".0") == expected.toString().length() - 2) {
-                    expected = Integer.parseInt(expected.toString().replace(".0", ""));
-                }
-                if (!actual[k].equals(expected)) {
-                    result.errors.add("Error in test " + (round + 1) + ": " + actual[k] + " should be " + expected);
-                    check="error";
-                } else {
-                    result.passedTests += 1;
-                }
+            Object expected = test.getExpectedReturn();
+            if (expected.toString().indexOf(".0") == expected.toString().length() - 2) {
+                expected = Integer.parseInt(expected.toString().replace(".0", ""));
+            }
+            if (!actual.equals(expected)) {
+                result.errors.add("Error in test " + (round + 1) + ": Output " + actual + " does not satisfy the challenge with inputs " + Arrays.toString(test.getArguments()) + "!");
+                check="error";
+            } else {
+                result.passedTests += 1;
             }
         }
         return check;

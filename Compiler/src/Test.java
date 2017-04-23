@@ -4,7 +4,7 @@
 public class Test {
 
     private String[] arguments;
-    private Object[] expectedReturns;
+    private Object expectedReturn;
 
     public String[] getArguments() {
         return arguments;
@@ -14,11 +14,11 @@ public class Test {
         this.arguments = arguments;
     }
 
-    public Object[] getExpectedReturns() {
-        return expectedReturns;
+    public Object getExpectedReturn() {
+        return expectedReturn;
     }
 
-    public void setExpectedReturns(Object[] expectedReturns) {
-        this.expectedReturns = expectedReturns;
+    public void setExpectedReturn(Object expectedReturn) {
+        this.expectedReturn = expectedReturn;
     }
 }

@@ -1,26 +1,21 @@
 {
   "name": "Adding numbers",
-  "description": "Add the two arguments together and return the result.",
-  "filename": "Challenge_One",
+  "description": "Add the two arguments together and return the result",
   "tests": [
     {
       "arguments": [
         "4",
         "6"
       ],
-      "expectedReturns": [
-        10
-      ]
+      "expectedReturn": 10
     },
     {
       "arguments": [
         "10",
         "6"
       ],
-      "expectedReturns": [
-        16
-      ]
+      "expectedReturn": 16
     }
   ],
-  "initialCode": "public class Program {\n\tpublic Object[] run(String[] args) {\n\t\treturn new Object[] {-1};\n\t}\n}"
-}
+  "initialCode": "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn -1;\n\t}\n}"
+} 
