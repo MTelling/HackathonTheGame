@@ -6,6 +6,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 export default class Editor extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      selectOnLineNumbers: true,
+      autoSize: true,
+      automaticLayout: true,
+    };
     this.editorDidMount = this.editorDidMount.bind(this);
   }
 
@@ -15,24 +20,17 @@ export default class Editor extends Component {
   }
 
   render() {
-    const options = {
-      selectOnLineNumbers: true
-    };
-
     return (
-      <div>
+      <div className="editorContainer">
         <MonacoEditor
-          width="100%"
-          height="600"
+          width={this.props.width}
+          height="500"
           language="java"
-          options={options}
+          options={this.state}
           value={this.props.code}
           onChange={this.props.onChange}
           editorDidMount={this.editorDidMount}
         />
-      <form onSubmit={this.props.onSubmit}>
-        <RaisedButton className="submitCode" label="Submit" type="submit"/>
-      </form>
       </div>
     );
   }
