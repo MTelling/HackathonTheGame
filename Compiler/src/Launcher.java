@@ -10,6 +10,7 @@ import java.net.URLClassLoader;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
@@ -119,7 +120,7 @@ class CodeChecker implements Callable<String> {
                     expected = Integer.parseInt(expected.toString().replace(".0", ""));
                 }
                 if (!actual[k].equals(expected)) {
-                    result.errors.add("Error in test " + (round + 1) + ": " + actual[k] + " should be " + expected);
+                    result.errors.add("Error in test " + (round + 1) + ": Output " + actual[k] + " does not satisfy the challenge with inputs " + Arrays.toString(test.getArguments()) + "!");
                     check="error";
                 } else {
                     result.passedTests += 1;
