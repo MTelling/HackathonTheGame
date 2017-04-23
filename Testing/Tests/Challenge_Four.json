@@ -22,5 +22,8 @@
       "expectedReturn": "grebmoolB"
     }
   ],
-  "initialCode": "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn \"reversed string\";\n\t}\n}"
+  "initialCode" : {
+    "java" : "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn \"reversedstring\";\n\t}\n}",
+    "javascript" : "function program(args) {\n\treturn \"reversedstring\";\n}"
+  }
 }
