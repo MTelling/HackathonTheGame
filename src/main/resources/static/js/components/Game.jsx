@@ -26,6 +26,7 @@ export default class Game extends Component {
   componentDidMount(){
     var socket = new SockJS('/htg');
     this.stompClient = Stomp.over(socket);
+
     var that = this;
     this.stompClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
