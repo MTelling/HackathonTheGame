@@ -1,6 +1,8 @@
 package com.htg;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Morten on 22/04/2017.
@@ -9,7 +11,7 @@ public class ChallengeDescription {
 
     private String name, description, filename;
     private List<Test> tests;
-    private Map<String, String> initialCode = new Hashmap<>();
+    private Map<String, String> initialCode = new HashMap<>();
 
     public String getName() {
         return name;

@@ -61,8 +61,7 @@ export default class Game extends Component {
           console.log("Got game description ("+challengeDescription.name+")!");
 
           if (that.state.challenge === null || challengeDescription.name !== that.state.challenge.name) {
-            challengeDescription.initialCode+="\n//type your code here...\
-            \n//return new Object[] {Integer.parseInt(args[0])+Integer.parseInt(args[1])};"
+            challengeDescription.initialCode+="\n//type your code here...";
             that.setState({
               challenge: challengeDescription,
               code: challengeDescription.initialCode,
@@ -223,10 +222,7 @@ export default class Game extends Component {
           label="Reset"
           className="submitCode"
           onTouchTap={()=>this.setState({reset: true})}/>
-        <RaisedButton
-          label="Test LB"
-          className="submitCode"
-          onTouchTap={this.handleTestLeaderBoard}/>
+
 
         <Dialog
             title="Reset your code?"
