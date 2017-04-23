@@ -25,7 +25,7 @@ export default class Output extends Component {
           <Tabs value={this.state.tab} onChange={this.handleChangeTab}
             tabItemContainerStyle={{backgroundColor:"#FFD54F"}}
             inkBarStyle={{backgroundColor: "#EF5350"}}
-            style={{height: "100%", backgroundColor: this.state.tab=="output"?"black":"#E0F2F1"}}>
+            style={{backgroundColor: this.state.tab=="output"?"black":"#E0F2F1", overflow:"hidden"}}>
             <Tab label="Challenge" value="description" style={{color:"black"}}>
               <div className="description">
                 Goal: {this.props.description}
