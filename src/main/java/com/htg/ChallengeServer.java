@@ -1,6 +1,8 @@
 package com.htg;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,14 +14,15 @@ import java.util.Queue;
 public class ChallengeServer {
 
     private final String pathToChallenges = "Testing/Tests/";
-    private final String fileType = ".json";
     private Queue<String> challengeNames = new LinkedList<>();
 
     public ChallengeServer() {
-        challengeNames.add("Challenge_One");
-        challengeNames.add("Challenge_Two");
-        challengeNames.add("Challenge_Three");
-        challengeNames.add("Challenge_Four");
+        try {
+            Files.newDirectoryStream(Paths.get(pathToChallenges), path -> path.toFile().isFile())
+                    .forEach(path -> challengeNames.add(path.getFileName().toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public ChallengeDescription getNextChallengeDescription() {
@@ -37,7 +40,7 @@ public class ChallengeServer {
     }
 
     private String createPath(String challenge) {
-        return pathToChallenges + challenge + fileType;
+        return pathToChallenges + challenge;
     }
 
 }
