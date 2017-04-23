@@ -28,6 +28,8 @@ public class PMController {
     public PMResponse codeCheck(PMRequest pmRequest, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
 
+        if (sessionID == null) return new PMResponse("NO USER IN!!");
+
         System.out.println("In the pmcontroller");
         String[] compileResults;
         String[] runtimeResults;
@@ -71,30 +73,31 @@ public class PMController {
         // Check if all tests are completed
         RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
         if ( runnerResult.isSuccess() ) {
-            announceWin(state.getUser(sessionID).getName());
             state.updateUserScore(sessionID, 1);
+            announceWin(state.getUser(sessionID).getName());
         }
 
         return new PMResponse(createOutputString(runnerResult));
     }
 
     private String createOutputString(RunnerResult runnerResult) {
+        final String NEW_LINE = ", ";
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("Succeeded: ").append(runnerResult.isSuccess() ? "Yes": "No").append("\n");
-        stringBuilder.append("Passed Tests: ").append(runnerResult.getPassedTests()).append("\n");
+        stringBuilder.append("Succeeded: ").append(runnerResult.isSuccess() ? "Yes": "No").append(NEW_LINE);
+        stringBuilder.append("Passed Tests: ").append(runnerResult.getPassedTests()).append(NEW_LINE);
 
         if (runnerResult.getErrors().size() > 0) {
-            stringBuilder.append("Tests: ").append("\n");
+            stringBuilder.append("Tests: ").append(NEW_LINE);
             runnerResult.getErrors().forEach((error) -> {
-                stringBuilder.append(error).append("\n");
+                stringBuilder.append(error).append(NEW_LINE);
             });
         }
 
         if (runnerResult.getRuntimeErrors().size() > 0) {
-            stringBuilder.append("Runtime Errors: ").append("\n");
+            stringBuilder.append("Runtime Errors: ").append(NEW_LINE);
             runnerResult.getRuntimeErrors().forEach((error) -> {
-                stringBuilder.append(error).append("\n");
+                stringBuilder.append(error).append(NEW_LINE);
             });
         }
 
