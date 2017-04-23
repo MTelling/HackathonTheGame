@@ -28,6 +28,8 @@ public class PMController {
     public PMResponse codeCheck(PMRequest pmRequest, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
 
+        if (sessionID == null) return new PMResponse("NO USER IN!!");
+
         System.out.println("In the pmcontroller");
         String[] compileResults;
         String[] runtimeResults;
@@ -79,7 +81,7 @@ public class PMController {
     }
 
     private String createOutputString(RunnerResult runnerResult) {
-        final String NEW_LINE = "\n";
+        final String NEW_LINE = ", ";
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("Succeeded: ").append(runnerResult.isSuccess() ? "Yes": "No").append(NEW_LINE);

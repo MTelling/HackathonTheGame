@@ -17,6 +17,7 @@ export default class Game extends Component {
       },
       code: "",
       output: "",
+      username: "",
     };
     this.handleToggle = this.handleToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -46,6 +47,16 @@ export default class Game extends Component {
           }
       });
 
+      that.stompClient.subscribe('/user/queue/checkLogin', function (response) {
+          var message = JSON.parse(response.body);
+
+          if (message.status === "alreadyIn") {
+              that.setState({
+                username: message.username
+              });
+          }
+      });
+
       that.stompClient.subscribe('/user/queue/pm', function (pmResponse) {
         // log to output
           console.log("Got pm response!");
@@ -68,6 +79,7 @@ export default class Game extends Component {
       });
 
       that.stompClient.send("/app/game", {}, JSON.stringify({}));
+      that.stompClient.send("/app/checkLogin", {}, JSON.stringify({"username": ""}));
     });
   }
 
@@ -88,13 +100,13 @@ export default class Game extends Component {
   }
 
   render() {
-    let user = this.context.store.user;
+    let username = this.state.username;
     let challenge = this.state.challenge;
 
     return (
       <div className="gameContainer">
         <h1>Challenge - {challenge.name}</h1>
-        <h3>Welcome {user.username}</h3>
+        <h3>Welcome {username}</h3>
         <p>{"Hint (will be removed):"}<br/>
 		        {""}
         </p>
