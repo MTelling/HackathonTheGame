@@ -8,19 +8,15 @@
         "10",
         "6"
       ],
-      "expectedReturns": [
-        60
-      ]
+      "expectedReturn": 60
     },
     {
       "arguments": [
         "1",
         "2"
       ],
-      "expectedReturns": [
-        2
-      ]
+      "expectedReturn": 2
     }
   ],
-  "initialCode": "public class Program {\n\tpublic Object[] run(String[] args) {\n\t\treturn new Object[] {-1};\n\t}\n}"
+  "initialCode": "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn -1;\n\t}\n}"
 }
