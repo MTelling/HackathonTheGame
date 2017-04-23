@@ -31,10 +31,9 @@ public class PMController {
         if (sessionID == null) return new PMResponse("NO USER IN!!");
 
         System.out.println("In the pmcontroller");
-        String[] compileResults;
-        String[] runtimeResults;
 
-        String  code = pmRequest.getCode(),
+        String language = pmRequest.getLanguage(),
+                code = pmRequest.getCode(),
                 testingPath = "Testing",
                 compilePath = "",
                 path = Paths.get("").toAbsolutePath().toString(),
@@ -42,23 +41,47 @@ public class PMController {
                 className = classNamePrefix + sessionID,
                 fileName = className + ".java";
 
+        language = "js";
+
+        switch(language){
+            case "js":
+                return handleJSCode(code, sessionID);
+            case "java":
+                return handleJavaCode(code, sessionID);
+            default:
+                return handleJavaCode(code, sessionID);
+        }
+    }
+
+    private static final String testingPath = "Testing/",
+                                absolutePath = Paths.get("").toAbsolutePath().toString(),
+                                classNamePrefix = "P";
+
+    private PMResponse handleJavaCode(String code, String sessionId) throws IOException, InterruptedException {
+
+        String  className = classNamePrefix + sessionId,
+                fileName = className + ".java";
+
+
         code = "package Testing; " + code;
         code = code.replace("public class Program", "public class " + className);
+
+
 
         // Write code to java file
         try( PrintWriter out = new PrintWriter( testingPath + "/" + fileName ) ) { out.println( code ); }
 
         // Compiles given code, returns if it failed compiling
 
-        compileResults = run("javac", path  + "/" + testingPath + "/" + fileName);
+        String[] compileResults = run("javac", absolutePath + "/" + testingPath + fileName);
         System.out.println("Compile result: " + Arrays.toString(compileResults));
         if (compileResults[1].length() > 0) {
             return new PMResponse(compileResults[1]);
         }
 
         // Runs tests
-        System.out.println(path + "Compiler.jar");
-        runtimeResults = run("java", "-jar", path + "/Compiler.jar", state.getCurrentChallengeDescription().getFilename(), className);
+        System.out.println(absolutePath + "Runner.jar");
+        String[] runtimeResults = run("java", "-jar", absolutePath + "/Runner.jar", state.getCurrentChallengeDescription().getFilename(), className, "Java");
         System.out.println("Run result: " + Arrays.toString(runtimeResults));
 
         // If there are any errors, show them.
@@ -66,19 +89,44 @@ public class PMController {
             return new PMResponse(runtimeResults[1]);
         }
 
-        // Build result
+        // Build output
         String output = runtimeResults[0];
+        return handleOutput(output, sessionId);
+    }
 
-        // Check if all tests are completed
+    private PMResponse handleJSCode(String code, String sessionId) throws IOException, InterruptedException {
+        String extension = ".js";
+        try {
+            try( PrintWriter out = new PrintWriter( testingPath + classNamePrefix + sessionId + extension ) ) { out.println( code ); }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String[] runtimeResults = run("java", "-jar", absolutePath + "/Runner.jar",
+                state.getCurrentChallengeDescription().getFilename(),
+                classNamePrefix + sessionId,
+                "Javascript");
+        System.out.println("Run result: " + Arrays.toString(runtimeResults));
+
+        // If there are any errors, show them.
+        if ( runtimeResults[1].length() > 0 ) {
+            return new PMResponse(runtimeResults[1]);
+        }
+        // Build output
+        String output = runtimeResults[0];
+        return handleOutput(output, sessionId);
+    }
+
+    PMResponse handleOutput(String output, String sessionId){
         RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
         if ( runnerResult.isSuccess() ) {
-            System.out.println("session id is: " + sessionID);
-            state.updateUserScore(sessionID, 1);
-            announceWin(state.getUser(sessionID).getName());
+            System.out.println("session id is: " + sessionId);
+            state.updateUserScore(sessionId, 1);
+            announceWin(state.getUser(sessionId).getName());
         }
 
         return new PMResponse(createOutputString(runnerResult));
     }
+
 
     private String createOutputString(RunnerResult runnerResult) {
         final String NEW_LINE = ", ";

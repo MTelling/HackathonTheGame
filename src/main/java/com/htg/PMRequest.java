@@ -5,11 +5,16 @@ package com.htg;
  */
 public class PMRequest {
     private String code;
+    private String language = "java";
 
     public PMRequest(){};
 
-    public PMRequest(String code) {
+    public PMRequest(String code){
         this.code = code;
+    }
+    public PMRequest(String code, String language) {
+        this.code = code;
+        this.language = language;
     }
 
     public String getCode() {
@@ -18,5 +23,9 @@ public class PMRequest {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 }
