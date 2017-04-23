@@ -25,6 +25,7 @@ export default class UserInfo extends Component {
         actions={actions}
         modal={true}
         open={this.props.open}>
+        <div>Score: {this.props.score}</div>
       </Dialog>
     );
   }

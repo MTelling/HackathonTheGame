@@ -22,9 +22,9 @@ public class LoginController {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
         User user = serverState.getUser(sessionID);
         if (user != null) {
-            return new LoginResponse("alreadyIn", user.getName());
+            return new LoginResponse("alreadyIn", user.getName(), user.getScore(), serverState.getLeaderboard());
         } else {
-            return new LoginResponse("newUser", "");
+            return new LoginResponse("newUser", "", 0, serverState.getLeaderboard());
         }
     }
 
@@ -34,9 +34,9 @@ public class LoginController {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
         User user = new User(message.getUsername());
         if (serverState.addUser(sessionID, user)) {
-            return new LoginResponse("success", user.getName());
+            return new LoginResponse("success", user.getName(), user.getScore(), serverState.getLeaderboard());
         } else {
-            return new LoginResponse("exists", user.getName());
+            return new LoginResponse("exists", user.getName(), user.getScore(), serverState.getLeaderboard());
         }
     }
 }

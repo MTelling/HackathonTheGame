@@ -5,11 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.FileSystems;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -17,18 +14,24 @@ import java.util.concurrent.*;
  */
 public class Launcher {
 
+    private static Map<String, Runner> availableCompilers = new HashMap<>();
+
+    public static Gson gson = null;
+    public static Result result = null;
+
     public static void main(String... args) {
-        Result result = new Result();
+        result = new Result();
         GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.setPrettyPrinting().serializeNulls().create();
+        gson = gsonBuilder.setPrettyPrinting().serializeNulls().create();
         if(args.length < 2) {
             result.runtimeErrors.add("Error: Please supply name of the challenge as well as the name of the class file as arguments");
             System.out.println(gson.toJson(result, Result.class));
             System.exit(0);
         }
 
-        File compilerRoot = new File(Paths.get("").toString());
-        String absPath = compilerRoot.getAbsolutePath();
+        availableCompilers.put("Java", new JavaRunner());
+        availableCompilers.put("Javascript", new JavascriptRunner());
+
         File root = new File(FileSystems.getDefault().getPath("../").toAbsolutePath().toString());
 
         Challenge challenge = null;
@@ -42,24 +45,15 @@ public class Launcher {
         }
 
         if(challenge != null) {
-            Object prg = null;
-            java.lang.reflect.Method method = null;
-            try {
-                URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{root.toURI().toURL()});
-                Class<?> aClass = Class.forName("Testing." + args[1], true, classLoader);
-                prg = aClass.newInstance();
+            String wantedCompiler = args.length < 3 ? "Java" : args[2];
+            Runner runner = availableCompilers.getOrDefault(wantedCompiler, availableCompilers.get("Java"));
 
-                method = aClass.getMethod("run", String[].class);
-            } catch (Exception e) {
-                e.printStackTrace();
-                result.runtimeErrors.add(e.getMessage());
-                System.out.println(gson.toJson(result, Result.class));
-                System.exit(0);
-            }
+            CodeChecker codeChecker = runner.getCodeChecker(root, args[1]);
+
             for (int i = 0; i < challenge.getTests().size(); i++) {
                 Test test = challenge.getTests().get(i);
                 ExecutorService executor = Executors.newSingleThreadExecutor();
-                Future<String> future = executor.submit(new CodeChecker(prg, method, result, test, i));
+                Future<String> future = executor.submit(codeChecker.newRound(test, i));
                 try {
                     if(future.get(30, TimeUnit.SECONDS).equals("error")) {
                         System.out.println(gson.toJson(result, Result.class));
@@ -82,48 +76,5 @@ public class Launcher {
         }
         System.out.println(gson.toJson(result, Result.class));
         System.exit(0);
-    }
-}
-
-class CodeChecker implements Callable<String> {
-    Object prg;
-    java.lang.reflect.Method method;
-    Result result;
-    Test test;
-    int round;
-
-    public CodeChecker(Object program, java.lang.reflect.Method method, Result result, Test test, int round) {
-        this.prg = program;
-        this.method = method;
-        this.result = result;
-        this.test = test;
-        this.round = round;
-    }
-
-    @Override
-    public String call() throws Exception {
-        String check = "";
-        Object actual = new Object();
-        try {
-            actual = method.invoke(prg, new Object[]{test.getArguments()});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (actual == null) {
-            result.errors.add("Error in test " + (round + 1) + ": Number of returned variables is wrong");
-            check = "error";
-        } else {
-            Object expected = test.getExpectedReturn();
-            if (expected.toString().indexOf(".0") == expected.toString().length() - 2) {
-                expected = Integer.parseInt(expected.toString().replace(".0", ""));
-            }
-            if (!actual.equals(expected)) {
-                result.errors.add("Error in test " + (round + 1) + ": Output " + actual + " does not satisfy the challenge with inputs " + Arrays.toString(test.getArguments()) + "!");
-                check="error";
-            } else {
-                result.passedTests += 1;
-            }
-        }
-        return check;
     }
 }

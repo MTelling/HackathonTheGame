@@ -48,7 +48,6 @@ public class PMController {
         // Write code to java file
         try( PrintWriter out = new PrintWriter( testingPath + "/" + fileName ) ) { out.println( code ); }
 
-
         // Compiles given code, returns if it failed compiling
 
         compileResults = run("javac", path  + "/" + testingPath + "/" + fileName);
@@ -59,7 +58,7 @@ public class PMController {
 
         // Runs tests
         System.out.println(path + "Compiler.jar");
-        runtimeResults = run("java", "-jar", path + "/Compiler.jar", state.getCurrentChallengeDescription().getFilename(), className);
+        runtimeResults = run("java", "-jar", path + "/Runner.jar", state.getCurrentChallengeDescription().getFilename(), className);
         System.out.println("Run result: " + Arrays.toString(runtimeResults));
 
         // If there are any errors, show them.
@@ -73,6 +72,7 @@ public class PMController {
         // Check if all tests are completed
         RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
         if ( runnerResult.isSuccess() ) {
+            System.out.println("session id is: " + sessionID);
             state.updateUserScore(sessionID, 1);
             announceWin(state.getUser(sessionID).getName());
         }
@@ -124,6 +124,15 @@ public class PMController {
         while ((currentLine = output.readLine()) != null) {
             outputBuilder.append(currentLine);
         }
+
+        try {
+            errors.close();
+            output.close();
+        } catch (Exception e) {
+            System.out.println("Couldn't close BReaders");
+            e.printStackTrace();
+        }
+
 
         return new String[]{outputBuilder.toString(), errorBuilder.toString()};
     }
