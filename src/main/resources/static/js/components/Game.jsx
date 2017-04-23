@@ -74,8 +74,6 @@ export default class Game extends Component {
       that.stompClient.subscribe('/user/queue/checkLogin', function (response) {
           var message = JSON.parse(response.body);
 
-          console.log(message);
-
           if (message.status === "alreadyIn") {
               that.setState({
                 user: {
@@ -88,9 +86,8 @@ export default class Game extends Component {
                   }),
               });
 
-
           } else {
-              console.log(that.props.router);
+              console.log("NOT LOGGED IN: " + message.status);
               that.props.router.push("/");
           }
       });
@@ -122,8 +119,13 @@ export default class Game extends Component {
           }
       });
 
-      that.stompClient.send("/app/game", {}, JSON.stringify({}));
-      that.stompClient.send("/app/checkLogin", {}, JSON.stringify({"username": ""}));
+      setTimeout(function() {
+          console.log("Running from timout!");
+
+          that.stompClient.send("/app/game", {}, JSON.stringify({}));
+          that.stompClient.send("/app/checkLogin", {}, JSON.stringify({"username": ""}));
+
+      }, 25);
 
     });
   }
