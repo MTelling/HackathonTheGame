@@ -74,3 +74,4 @@ node_modules/
 dist/
 Testing/
 .DS_Store
+storedUsers.json

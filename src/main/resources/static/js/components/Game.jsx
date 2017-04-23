@@ -21,15 +21,19 @@ export default class Game extends Component {
         description: "Sample Description",
         initialCode: "//type your code here...",
       },
-      userinfo: false,
-      code: "",
-      output: "Sample Output",
+      user:{
+        open: false,
+        username: "Anonymous",
+      },
       state: {
         ready: false,
         over: false,
         winner: "",
         lb: [],
-      }
+      },
+      submitting: false,
+      code: "",
+      output: "Sample Output",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -75,6 +79,7 @@ export default class Game extends Component {
       that.stompClient.subscribe('/user/queue/pm', function (pmResponse) {
           console.log("Got pm response!");
           that.setState({
+            submitting: false,
             output: JSON.parse(pmResponse.body).message,
           })
       });
@@ -116,12 +121,15 @@ export default class Game extends Component {
 
   handleUserInfo(){
     this.setState({
-      userinfo: !this.state.userinfo,
+      user: Object.assign({}, this.state.user, { open: !this.state.user.open }),
     });
   }
 
   handleSubmitCode(e) {
     e.preventDefault();
+    this.setState({
+      submitting: true,
+    });
     this.stompClient.send("/app/pm", {}, JSON.stringify({"code": this.state.code }));
   }
 
@@ -141,9 +149,8 @@ export default class Game extends Component {
   }
 
   render() {
-    let username = this.state.username;
+    let user = this.state.user;
     let challenge = this.state.challenge;
-    user.username = user.username ? user.username : "No name";
 
     return (
       <div className="gameContainer" style={{width: this.state.width + "%"}}>
@@ -170,11 +177,14 @@ export default class Game extends Component {
           onClose={this.handleClose}/>
         <UserInfo
           username={user.username}
-          open={this.state.userinfo}
+          open={user.open}
           onClose={this.handleUserInfo}/>
 
         <form onSubmit={this.handleSubmitCode}>
-          <RaisedButton className="submitCode" label="Submit" type="submit"/>
+          <RaisedButton
+            label="Submit" type="submit"
+            className="submitCode"
+            disabled={this.state.submitting}/>
         </form>
 
         <RaisedButton
