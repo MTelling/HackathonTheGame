@@ -48,7 +48,6 @@ public class PMController {
         // Write code to java file
         try( PrintWriter out = new PrintWriter( testingPath + "/" + fileName ) ) { out.println( code ); }
 
-
         // Compiles given code, returns if it failed compiling
 
         compileResults = run("javac", path  + "/" + testingPath + "/" + fileName);
@@ -73,6 +72,7 @@ public class PMController {
         // Check if all tests are completed
         RunnerResult runnerResult = new Gson().fromJson(output, RunnerResult.class);
         if ( runnerResult.isSuccess() ) {
+            System.out.println("session id is: " + sessionID);
             state.updateUserScore(sessionID, 1);
             announceWin(state.getUser(sessionID).getName());
         }

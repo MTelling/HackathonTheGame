@@ -22,8 +22,9 @@ export default class Game extends Component {
         initialCode: "//type your code here...",
       },
       user:{
-        open: false,
-        username: "Anonymous",
+          open: false,
+          username: "Anonymous",
+          score: 0,
       },
       state: {
         ready: false,
@@ -69,10 +70,19 @@ export default class Game extends Component {
       that.stompClient.subscribe('/user/queue/checkLogin', function (response) {
           var message = JSON.parse(response.body);
 
+          console.log(message);
+
           if (message.status === "alreadyIn") {
               that.setState({
-                username: message.username
+                user: {
+                    username: message.username,
+                    open: false,
+                    score: message.score,
+                }
               });
+          } else {
+              console.log(that.props.router);
+              that.props.router.push("/");
           }
       });
 
@@ -159,7 +169,7 @@ export default class Game extends Component {
           <div className="chipContainer">
             <Chip onTouchTap={this.handleUserInfo}>
               <Avatar icon={<SvgIconFace/>} />
-              {user.username}
+                {this.state.user.username}
             </Chip>
           </div>
         </h1>
@@ -176,8 +186,9 @@ export default class Game extends Component {
           gameState={this.state.state}
           onClose={this.handleClose}/>
         <UserInfo
-          username={user.username}
-          open={user.open}
+          username={this.state.user.username}
+          open={this.state.user.open}
+          score={this.state.user.score}
           onClose={this.handleUserInfo}/>
 
         <form onSubmit={this.handleSubmitCode}>

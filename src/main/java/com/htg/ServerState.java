@@ -18,26 +18,16 @@ public class ServerState {
 
     synchronized boolean addUser( String sessionId, User user ){
         // If server was empty, but user joined, load old scores
-        if(sessionIds.size() == 0)
-            loadStoredUsers();
 
-        boolean newUser = !users.containsKey(user.getName()),
-                inactiveUser = !sessionIds.containsKey(sessionId);
-
-        if(!newUser && !inactiveUser)
+        if (users.containsKey(user.getName().toLowerCase())) {
             return false;
-        if(newUser){
-            users.put(user.getLowName(), user);
-            leaderboard.add(user);
         }
-        if(inactiveUser)
-            sessionIds.put(sessionId, user);
-        try {
-            saveCurrentUsers();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        sessionIds.put(sessionId, user);
+        users.put(user.getName().toLowerCase(), user);
+
         return true;
+
     }
 
     synchronized User getUser (String sessionId) {
@@ -62,34 +52,34 @@ public class ServerState {
         return leaderboard;
     }
 
-    synchronized public void loadStoredUsers() {
-        System.out.println("Loading users...");
-        Scanner sc = null;
-        try {
-            sc = new Scanner(new File("storedUsers.json"));
-            StringBuilder builder = new StringBuilder();
-            while (sc.hasNextLine())
-                builder.append(sc.nextLine());
-            StoredUsers storedUsers = new Gson().fromJson(builder.toString(), StoredUsers.class);
-            for (User u : storedUsers.getUsers() ){
-                users.put(u.getLowName(), u);
-                leaderboard.add(u);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    synchronized public void saveCurrentUsers() throws FileNotFoundException {
-        System.out.println("Saving users...");
-        StringBuilder builder = new StringBuilder();
-        Gson gson = new Gson();
-        ArrayList<User> tempLeaderboard = getLeaderboard();
-        User[] users = new User[tempLeaderboard.size()];
-        tempLeaderboard.toArray(users);
-        builder.append("{").append("\"users\":").append(gson.toJson(users)).append("}");
-        try( PrintWriter out = new PrintWriter( "storedUsers.json" ) ) { out.println( builder.toString() ); }
-    }
+//    synchronized public void loadStoredUsers() {
+//        System.out.println("Loading users...");
+//        Scanner sc = null;
+//        try {
+//            sc = new Scanner(new File("storedUsers.json"));
+//            StringBuilder builder = new StringBuilder();
+//            while (sc.hasNextLine())
+//                builder.append(sc.nextLine());
+//            StoredUsers storedUsers = new Gson().fromJson(builder.toString(), StoredUsers.class);
+//            for (User u : storedUsers.getUsers() ){
+//                users.put(u.getLowName(), u);
+//                leaderboard.add(u);
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    synchronized public void saveCurrentUsers() throws FileNotFoundException {
+//        System.out.println("Saving users...");
+//        StringBuilder builder = new StringBuilder();
+//        Gson gson = new Gson();
+//        ArrayList<User> tempLeaderboard = getLeaderboard();
+//        User[] users = new User[tempLeaderboard.size()];
+//        tempLeaderboard.toArray(users);
+//        builder.append("{").append("\"users\":").append(gson.toJson(users)).append("}");
+//        try( PrintWriter out = new PrintWriter( "storedUsers.json" ) ) { out.println( builder.toString() ); }
+//    }
 
 
     synchronized public ChallengeDescription getCurrentChallengeDescription() {
@@ -110,3 +100,27 @@ public class ServerState {
         return users;
     }
 }
+//
+//        synchronized boolean addUser( String sessionId, User user ){
+//            // If server was empty, but user joined, load old scores
+//            if(sessionIds.size() == 0)
+//                loadStoredUsers();
+//
+//            boolean newUser = !users.containsKey(user.getName()),
+//                    inactiveUser = !sessionIds.containsKey(sessionId);
+//
+//            if(!newUser && !inactiveUser)
+//                return false;
+//            if(newUser){
+//                users.put(user.getLowName(), user);
+//                leaderboard.add(user);
+//            }
+//            if(inactiveUser)
+//                sessionIds.put(sessionId, user);
+//            try {
+//                saveCurrentUsers();
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            return true;
+//        }
