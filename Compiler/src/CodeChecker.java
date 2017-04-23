@@ -23,15 +23,17 @@ public abstract class CodeChecker implements Callable<String> {
             return "error";
         } else {
             Object expected = test.getExpectedReturn();
-            if (expected.toString().indexOf(".0") == expected.toString().length() - 2) {
-                expected = Integer.parseInt(expected.toString().replace(".0", ""));
-            }
+
             if (!actual.equals(expected)) {
-                Launcher.result.errors.add("Error in test " + (round + 1) + ": Output " + actual + " does not satisfy the challenge with inputs " + Arrays.toString(test.getArguments()) + "!");
-                return "error";
-            } else {
-                Launcher.result.passedTests += 1;
+                if (expected.toString().indexOf(".0") == expected.toString().length() - 2) {
+                    expected = Integer.parseInt(expected.toString().replace(".0", ""));
+                    if(!actual.equals(expected)) {
+                        Launcher.result.errors.add("Error in test " + (round + 1) + ": Output " + actual + " does not satisfy the challenge with inputs " + Arrays.toString(test.getArguments()) + "!");
+                        return "error";
+                    }
+                }
             }
+            Launcher.result.passedTests += 1;
         }
         return "";
     }
