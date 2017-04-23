@@ -7,8 +7,9 @@ import java.util.List;
  */
 public class ChallengeDescription {
 
-    private String name, description, initialCode, filename;
+    private String name, description, filename;
     private List<Test> tests;
+    private Map<String, String> initialCode = new Hashmap<>();
 
     public String getName() {
         return name;
@@ -35,11 +36,11 @@ public class ChallengeDescription {
     }
 
     public String getInitialCode() {
-        return initialCode;
+        return initialCode.get("java");
     }
 
     public void setInitialCode(String initialCode) {
-        this.initialCode = initialCode;
+        this.initialCode.put("java", initialCode);
     }
 
     public String getFilename() {
