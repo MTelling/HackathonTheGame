@@ -13,30 +13,9 @@ module.exports = function () {
     user: user,
     challenge: currentChallengeDescription,
     stompClient: stompClient,
-    connect: function (router) {
-        var socket = new SockJS('/htg');
-        stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/user/queue/login', function (status) {
-              var response = JSON.parse(status.body)
-              var status = response.status;
-                if (status === "success") {
-                   // GUI
-                   user.username = response.username;
-                   router.push('/game');
-                } else if (status === "exists") {
-                    // GUI
-                    console.log("EXIST!!");
-                }
-            });
-        });
-    },
-    login: function(username) {
-       console.log("Trying to login as " + username);
-       stompClient.send("/app/login", {}, JSON.stringify({"username": username}));
-     }
+    setUser: function(_user){
+      user = Object.assign({}, user, _user);
+    }
   };
 };
 //

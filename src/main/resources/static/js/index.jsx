@@ -23,7 +23,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.store.connect(this.props.router);
+    // this.store.connect(this.props.router);
   }
 
   render() {

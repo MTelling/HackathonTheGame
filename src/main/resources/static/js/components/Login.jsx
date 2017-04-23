@@ -14,6 +14,28 @@ export default class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount(){
+    var socket = new SockJS('/htg');
+    this.stompClient = Stomp.over(socket);
+    this.stompClient.debug = null;
+
+    var that = this;
+    this.stompClient.connect({}, function (frame) {
+      console.log('Connected: ' + frame);
+      that.stompClient.subscribe('/user/queue/login', function (status) {
+        var res = JSON.parse(status.body);
+        var status = res.status;
+          if (status === "success") {
+            that.context.store.setUser({ username: res.username });
+            that.props.router.push('/game');
+          } else if (status === "exists") {
+            that.setState({ exists: true });
+            console.log("EXIST!!");
+          }
+      });
+    });
+  }
+
   handleChange(e) {
     this.setState({
       exists: false,
@@ -23,8 +45,9 @@ export default class Login extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.context.store.login(this.state.value);
-    console.log("Submit username \"" + this.state.value + "\"");
+   console.log("Trying to login as " + this.state.value);
+   // this.context.store.login(this.state.value);
+   this.stompClient.send("/app/login", {}, JSON.stringify({"username": this.state.value}));
   }
 
   render() {
