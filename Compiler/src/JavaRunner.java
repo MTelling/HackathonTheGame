@@ -24,7 +24,7 @@ public class JavaRunner implements Runner {
             System.out.println(Launcher.gson.toJson(Launcher.result, Result.class));
             System.exit(0);
         }
-        return new JavaCodeChecker(prg, method, Launcher.result);
+        return new JavaCodeChecker(prg, method);
     }
 
 }
