@@ -13,7 +13,7 @@ public class ServerState {
     private ChallengeDescription currentChallengeDescription = challengeServer.getNextChallengeDescription();
     private HashMap<String, User> sessionIds = new HashMap<>();
     private HashMap<String, User> users = new HashMap<>();
-    private PriorityQueue<User> leaderboard = new PriorityQueue<>(Comparator.comparingInt(User::getScore));
+    private PriorityQueue<User> leaderboard = new PriorityQueue<>((o1, o2) -> o2.getScore() - o1.getScore());
 
     /**
      * TODO: maybe add time limit on challenges?
