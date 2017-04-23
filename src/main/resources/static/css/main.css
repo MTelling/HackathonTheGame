@@ -78,7 +78,7 @@ a {
   background-color: black;
   margin: 5px auto;
   width: 100%;
-  height: 200px;
+  height: auto;
 }
 .tabContainer{
   background-color: black;
@@ -114,4 +114,11 @@ a {
 }
 
 
-
+div .description {
+  height: 200px;
+  overflow-y:auto;
+}
+div .output {
+  height: 200px;
+  overflow-y:auto;
+}
