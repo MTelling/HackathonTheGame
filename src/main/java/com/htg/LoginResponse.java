@@ -1,20 +1,25 @@
 package com.htg;
 
+import java.util.ArrayList;
+
 /**
  * Created by Morten on 22/04/2017.
  */
 public class LoginResponse {
 
+    private ArrayList<User> leaderboard;
     private String status;
     private String username;
     private int score;
 
+
     public LoginResponse(){};
 
-    public LoginResponse(String status, String username, int score) {
+    public LoginResponse(String status, String username, int score, ArrayList<User> leaderboard) {
         this.status = status;
         this.username = username;
         this.score = score;
+        this.leaderboard = leaderboard;
     }
 
     public String getStatus() {
@@ -39,5 +44,13 @@ public class LoginResponse {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public ArrayList<User> getLeaderboard() {
+        return leaderboard;
+    }
+
+    public void setLeaderboard(ArrayList<User> leaderboard) {
+        this.leaderboard = leaderboard;
     }
 }

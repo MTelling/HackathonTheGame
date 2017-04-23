@@ -82,8 +82,13 @@ export default class Game extends Component {
                     username: message.username,
                     open: false,
                     score: message.score,
-                }
+                },
+                  state: Object.assign({}, that.state.state, {
+                      lb: message.leaderboard,
+                  }),
               });
+
+
           } else {
               console.log(that.props.router);
               that.props.router.push("/");
@@ -113,11 +118,13 @@ export default class Game extends Component {
               }
             });
             that.stompClient.send("/app/game", {}, JSON.stringify({}));
+            that.stompClient.send("/app/checkLogin", {}, JSON.stringify({"username": ""}));
           }
       });
 
       that.stompClient.send("/app/game", {}, JSON.stringify({}));
       that.stompClient.send("/app/checkLogin", {}, JSON.stringify({"username": ""}));
+
     });
   }
 
