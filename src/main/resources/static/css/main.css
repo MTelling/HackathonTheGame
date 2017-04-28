@@ -1,124 +1,130 @@
 /* latin */
 @font-face {
-  font-family: 'Ranga';
-  font-style: normal;
-  font-weight: 400;
-  src: url(Ranga-Regular.ttf);
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+    font-family: 'Ranga';
+    font-style: normal;
+    font-weight: 400;
+    src: url(Ranga-Regular.ttf);
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
 
 /* latin */
 @font-face {
-  font-family: 'Ubuntu Mono';
-  font-style: normal;
-  font-weight: 400;
-  src: url(UbuntuMono-Regular.ttf);
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url(UbuntuMono-Regular.ttf);
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
 
 * {
-  min-height: 0;
-  min-width: 0;
+    min-height: 0;
+    min-width: 0;
 }
 body {
-  font-family: "Roboto Condensed", "Noto Sans TC", verdana, sans-serif;
-  font-weight: 200;
-  background: #80CBC4;
+    font-family: "Roboto Condensed", "Noto Sans TC", verdana, sans-serif;
+    font-weight: 200;
+    background: #80CBC4;
 }
 h1 {
-  font-weight: 500;
+    font-weight: 500;
 }
 h2 {
-  font-weight: 400;
+    font-weight: 400;
 }
 h3, h4, h5, h6 {
-  font-weight: 300;
+    font-weight: 300;
 }
 a {
-  color: black;
-  text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
 .container {
-  vertical-align: middle;
-  text-align: center;
-  min-height: 70vh;
+    vertical-align: middle;
+    text-align: center;
+    min-height: 70vh;
 }
 .loginContainer{
-  display: inline-block;
-  margin: 0 auto;
-  min-width: 400px;
-  max-width: 45%;
-  padding: 4% 0 2% 0;
-  vertical-align: middle;
+    display: inline-block;
+    margin: 0 auto;
+    min-width: 400px;
+    max-width: 45%;
+    padding: 4% 0 2% 0;
+    vertical-align: middle;
 }
 .loginButton {
-  margin: 0 5px;
+    margin: 0 5px;
 }
 .loginFooter {
-  position: absolute;
-  bottom: 0;
-  right: 5px;
-  font-size: 48px;
+    position: absolute;
+    bottom: 0;
+    right: 5px;
+    font-size: 48px;
 }
 .gameContainer {
-  text-align: left;
-  float: right;
+    text-align: left;
+    float: right;
 }
-.submitCode {
-  float: right;
-  margin: 20px 10px 10px 0;
+.submitCodeBtn {
+    float: right;
+    margin: 5px 0px 10px 0;
+}
+
+.resetCodeBtn {
+    float: right;
+    margin: 5px 20px 10px 0;
 }
 .editorContainer{
-  display: inline-block;
-  margin: 5px auto;
-  width: 100%;
+    display: inline-block;
+    margin: 5px auto;
+    width: 100%;
 }
 .outputContainer{
-  display: inline-block;
-  background-color: black;
-  margin: 5px auto;
-  width: 100%;
-  height: auto;
+    display: inline-block;
+    background-color: black;
+    margin: 5px auto;
+    width: 100%;
+    height: auto;
 }
+
 .tabContainer{
-  background-color: black;
-  height: 100%;
+    background-color: black;
+    height: 100%;
 }
 .output {
-  padding: 8px 10px;
-  color: white;
-  font-family: 'Ubuntu Mono', monospace;
-  font-size: 16px;
+    padding: 8px 10px;
+    color: white;
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 16px;
 }
 .description {
-  padding: 8px 10px;
-  color: black;
-  font-family: 'Ubuntu Mono', monospace;
-  font-size: 16px;
+    padding: 8px 10px;
+    color: black;
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 16px;
 }
 .tableHeader {
-  font-size: 20px !important; 
+    font-size: 20px !important;
 }
 .title {
-  text-align: center;
-  font-family: "Ranga", cursive;
-  font-style: normal;
-  font-size: 48px;
-  font-weight: 900;
+    text-align: center;
+    font-family: "Ranga", cursive;
+    font-style: normal;
+    font-size: 48px;
+    font-weight: 900;
 }
 .chipContainer {
-  position: absolute;
-  margin: 4px;
-  bottom: 0;
-  right: 20px;
+    position: absolute;
+    margin: 4px;
+    bottom: 0;
+    right: 20px;
 }
 
 
 div .description {
-  height: 200px;
-  overflow-y:auto;
+    height: 200px;
+    overflow-y:auto;
 }
 div .output {
-  height: 200px;
-  overflow-y:auto;
+    height: 200px;
+    overflow-y:auto;
 }

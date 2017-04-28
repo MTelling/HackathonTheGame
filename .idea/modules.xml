@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/git-springboottemplate_main.iml" filepath="$PROJECT_DIR$/.idea/modules/git-springboottemplate_main.iml" group="springboottemplate" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/git-springboottemplate_test.iml" filepath="$PROJECT_DIR$/.idea/modules/git-springboottemplate_test.iml" group="springboottemplate" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/springboottemplate.iml" filepath="$PROJECT_DIR$/.idea/modules/springboottemplate.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/springboottemplate.iml" filepath="$PROJECT_DIR$/.idea/modules/springboottemplate.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/springboottemplate_test.iml" filepath="$PROJECT_DIR$/.idea/modules/springboottemplate_test.iml" group="springboottemplate" />
     </modules>
   </component>

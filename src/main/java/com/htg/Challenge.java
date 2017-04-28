@@ -52,5 +52,33 @@ public class Challenge {
     public void setExternalName(String externalName) {
         this.externalName = externalName;
     }
+
+
+
+    public static void main(String[] args) {
+        int n = 25000;
+        int count = 0;
+        int current = 1;
+
+        while (count != n) {
+            current++;
+            if (isPrime(current)) {
+                count++;
+                System.out.println(current);
+            }
+        }
+
+        System.out.println(current);
+    }
+    private static boolean isPrime(int x) {
+        for (int i = 2; i < x / 2; i++) {
+            if (x % i == 0 && i != x) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
 

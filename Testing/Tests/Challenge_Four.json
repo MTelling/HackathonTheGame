@@ -1,6 +1,6 @@
 {
   "name": "Reversing input",
-  "description": "Given a string as input, return the string with the characters in the reverse order.",
+  "description": "Given a string as input, return the string with the characters in the reverse order.\n\nExample:\nGiven args[0] = \"abc\" return \"cba\".",
   "filename": "Challenge_Four",
   "tests": [
     {
@@ -23,7 +23,7 @@
     }
   ],
   "initialCode" : {
-    "java" : "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn \"reversedstring\";\n\t}\n}",
+    "java" : "public class Program {\n\tpublic Object run(String[] args) {\n\t\t//Type your code here...\n\t\treturn \"reversedstring\";\n\t}\n}",
     "javascript" : "function program(args) {\n\treturn \"reversedstring\";\n}"
   }
 }

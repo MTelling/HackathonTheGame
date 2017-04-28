@@ -6,27 +6,27 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import ContentInbox from 'material-ui/svg-icons/content/inbox';
 
 export default class UserInfo extends Component {
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  render() {
-    const actions = [
-      <FlatButton
-        label="Close"
-        primary={true}
-        onTouchTap={this.props.onClose}
-      />,
-    ];
+    render() {
+        const actions = [
+          <FlatButton
+              label="Close"
+              primary={true}
+              onTouchTap={this.props.onClose}
+          />,
+        ];
 
-    return (
-      <Dialog
-        title={this.props.username}
-        actions={actions}
-        modal={true}
-        open={this.props.open}>
-        <div style={{fontSize: 40, textAlign: "center"}}>Score: {this.props.score}</div>
-      </Dialog>
-    );
-  }
+        return (
+            <Dialog
+                title={this.props.username}
+                actions={actions}
+                modal={true}
+                open={this.props.open}>
+              <div style={{fontSize: 40, textAlign: "center"}}>Score: {this.props.score}</div>
+            </Dialog>
+        );
+    }
 }

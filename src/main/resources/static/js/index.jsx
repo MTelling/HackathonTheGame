@@ -13,29 +13,29 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.store = store();
-  }
+    constructor(props) {
+        super(props);
+        this.store = store();
+    }
 
-  getChildContext() {
-    return { store: this.store };
-  }
+    getChildContext() {
+        return { store: this.store };
+    }
 
-  componentDidMount(){
-    // this.store.connect(this.props.router);
-  }
+    componentDidMount(){
+        // this.store.connect(this.props.router);
+    }
 
-  render() {
-    return (
-      // <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-      <MuiThemeProvider>
-        <div className="container">
-          {this.props.children}
-        </div>
-      </MuiThemeProvider>
-    );
-  }
+    render() {
+        return (
+            // <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+            <MuiThemeProvider>
+                <div className="container">
+                    {this.props.children}
+                </div>
+            </MuiThemeProvider>
+        );
+    }
 }
 
 App.childContextTypes = {
@@ -44,8 +44,8 @@ App.childContextTypes = {
 
 ReactDOM.render(
     <Router history={hashHistory}>
-      <Route path="/" component={App}>
-        <IndexRoute component={Login} />
-        <Route path="game" component={Game} />
-      </Route>
+        <Route path="/" component={App}>
+            <IndexRoute component={Login} />
+            <Route path="game" component={Game} />
+        </Route>
     </Router>, document.getElementById('root'));

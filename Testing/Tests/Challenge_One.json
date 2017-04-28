@@ -1,6 +1,6 @@
 {
   "name": "Adding numbers",
-  "description": "Add the two arguments together and return the result",
+  "description": "Add the two arguments together and return the result.\n\nExample:\nGiven args[0] = \"2\" and args[1] = \"3\" return 5.",
   "filename": "Challenge_One",
   "tests": [
     {
@@ -19,7 +19,7 @@
     }
   ],
   "initialCode" : {
-    "java" : "public class Program {\n\tpublic Object run(String[] args) {\n\t\treturn -1;\n\t}\n}",
+    "java" : "public class Program {\n\tpublic Object run(String[] args) {\n\t\t//Type your code here...\n\t\treturn -1;\n\t}\n}",
     "javascript" : "function program(args) {\n\treturn -1;\n}"
   }
 } 
