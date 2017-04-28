@@ -72,6 +72,5 @@ node_modules/
 .gradle/
 .idea/
 dist/
-Testing/
 .DS_Store
 storedUsers.json

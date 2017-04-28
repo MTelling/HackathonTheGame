@@ -1,0 +1,41 @@
+{
+  "name": "Palindromes",
+  "description": "Given a string as input, return true if the string is a palindrome and false if not.\nA palindrome is a word that is the same if you read it backwards as forwards.\n\nExamples:\nGiven args[0] = \"abba\" return true.\nGiven args[0] = \"abca\" return false.",
+  "filename": "Challenge_Six",
+  "tests": [
+    {
+      "arguments": [
+        "Copenhacks"
+      ],
+      "expectedReturn": false
+    },
+    {
+      "arguments": [
+        "abba"
+      ],
+      "expectedReturn": true
+    },
+    {
+      "arguments": [
+        "abbba"
+      ],
+      "expectedReturn": true
+    },
+    {
+      "arguments": [
+        "a"
+      ],
+      "expectedReturn": true
+    },
+    {
+      "arguments": [
+        "abca"
+      ],
+      "expectedReturn": false
+    }
+  ],
+  "initialCode" : {
+    "java" : "public class Program {\n\tpublic Object run(String[] args) {\n\t\t//Type your code here...\n\t\treturn false;\n\t}\n}",
+    "javascript" : "function program(args) {\n\treturn false;\n}"
+  }
+}

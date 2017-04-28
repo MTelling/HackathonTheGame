@@ -1,0 +1,35 @@
+{
+  "name": "Find the n'th prime number.",
+  "description": "Given n as input, return the n'th prime.\n\nExample:\nGiven args[0] = \"10\" return 23.",
+  "filename": "Challenge_Five",
+  "tests": [
+    {
+      "arguments": [
+        "10"
+      ],
+      "expectedReturn": 23
+    },
+    {
+      "arguments": [
+        "1000"
+      ],
+      "expectedReturn": 7907
+    },
+    {
+      "arguments": [
+        "25000"
+      ],
+      "expectedReturn": 287107
+    },
+    {
+      "arguments": [
+        "1"
+      ],
+      "expectedReturn": 2
+    }
+  ],
+  "initialCode" : {
+    "java" : "public class Program {\n\tpublic Object run(String[] args) {\n\t\t//Type your code here...\n\t\treturn -1;\n\t}\n}",
+    "javascript" : "function program(args) {\n\treturn -1;\n}"
+  }
+}
