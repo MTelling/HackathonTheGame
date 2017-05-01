@@ -1,6 +1,6 @@
 {
   "name": "Counting a's",
-  "description": "The goal of this challenge is to write a program that counts the number of a's in a string supplied in the first argument.\n\nExample:\nGiven args[0] = \"abc\" return 1.",
+  "description": "Count the number of a's in a string supplied in the first argument.\n\nExample:\nGiven args[0] = \"abc\" return 1.",
   "filename": "Challenge_Three",
   "tests": [
     {
