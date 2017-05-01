@@ -5,6 +5,7 @@ import com.google.gson.JsonParseException;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -32,12 +33,21 @@ public class PMController {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
         String challengeID = state.getCurrentChallengeDescription().getFilename();
 
-        if (sessionID == null) return new PMResponse("You need to be logged in!!!");
+        if (sessionID == null || state.getUser(sessionID) == null) {
+            Application.logger.info("Someone submitted code without being logged in!");
+            return new PMResponse("You need to be logged in!!! Please refresh the page.");
+        }
 
         String code = pmRequest.getCode();
         String challenge = state.getCurrentChallengeDescription().getFilename();
 
-        String resultFromCall = callRunManager(code, sessionID, challenge);
+        String resultFromCall = "";
+        try {
+            resultFromCall = callRunManager(code, sessionID, challenge);
+        } catch (Exception e) {
+            Application.logger.severe("Error connecting to code runner. Service down?");
+            return new PMResponse("Error connecting to the code runner. Please try again!");
+        }
 
         // Check if all tests are completed
         try {
@@ -82,12 +92,12 @@ public class PMController {
     }
 
 
-    private String callRunManager(String code, String sessionID, String challenge) throws UnirestException {
+    private String callRunManager(String code, String sessionID, String challenge) throws Exception {
         RunRequest runRequest = new RunRequest(sessionID, code, challenge);
 
         String url = Application.urlToRunner;
 
-        HttpResponse jsonResponse =  Unirest.post(url)
+        HttpResponse jsonResponse = Unirest.post(url)
                 .header("accept", "application/json")
                 .body(new Gson().toJson(runRequest)).asString();
 
@@ -120,7 +130,7 @@ public class PMController {
 
 
     public void announceWin(String winnerUsername) {
-        System.out.println("Announcing new winner");
+        Application.logger.info(winnerUsername + " won the current game.");
         simpMessagingTemplate.convertAndSend("/topic/news", new NewsResponse("win", winnerUsername, state.getLeaderboard()));
     }
 

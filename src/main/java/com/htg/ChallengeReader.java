@@ -11,7 +11,6 @@ public class ChallengeReader {
 
     public ChallengeDescription getChallengeDescriptionFromPath(String path) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
-        System.out.println(path);
         Files.lines(FileSystems.getDefault().getPath(path)).forEachOrdered(stringBuilder::append);
         Gson gson = new Gson();
         String jsonFile = stringBuilder.toString();

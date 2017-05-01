@@ -17,8 +17,7 @@ public class GameController {
     @SendToUser("/queue/game")
     public GameResponse gameResponse(GameRequest gameRequest, SimpMessageHeaderAccessor simpMessageHeaderAccessor) throws Exception {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
-
-        System.out.println(state.getCurrentChallengeDescription().getName());
+        Application.logger.info(sessionID + " requested new game.");
         return new GameResponse(state.getCurrentChallengeDescription());
     }
 

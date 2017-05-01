@@ -34,6 +34,7 @@ public class LoginController {
         String sessionID = simpMessageHeaderAccessor.getSessionAttributes().get("sessionID").toString();
         User user = new User(message.getUsername());
         if (serverState.addUser(sessionID, user)) {
+            Application.logger.info(user.getName() + " sucessfully logged in!");
             return new LoginResponse("success", user.getName(), user.getScore(), serverState.getLeaderboard());
         } else {
             return new LoginResponse("exists", user.getName(), user.getScore(), serverState.getLeaderboard());

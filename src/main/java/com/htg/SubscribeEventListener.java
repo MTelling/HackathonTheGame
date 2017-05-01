@@ -17,7 +17,6 @@ public class SubscribeEventListener implements ApplicationListener {
         if (event instanceof SessionSubscribeEvent) {
             SessionSubscribeEvent sessionSubscribeEvent = (SessionSubscribeEvent) event;
             StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(sessionSubscribeEvent.getMessage());
-            System.out.println("Socket request from: " + headerAccessor.getSessionAttributes().get("sessionID"));
         }
     }
 }
